@@ -1,0 +1,15 @@
+package com.xworkz.redcrossapp.service;
+
+import com.xworkz.redcrossapp.dto.DonerDTO;
+import com.xworkz.redcrossapp.dto.SearchDTO;
+
+import java.util.Optional;
+
+public interface DonerAccountService {
+
+    boolean validateAndSave(DonerDTO donerDTO);
+    Optional<DonerDTO> validateAndSearchByEmail(SearchDTO searchDTO);
+    DonerDTO updateDoner(DonerDTO donerDTO);
+    boolean deleteByEmail(String email);
+
+}

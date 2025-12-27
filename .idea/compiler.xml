@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="restaurant-system" />
+        <module name="medicine-system" />
+        <module name="mvc-system" />
+        <module name="blood-donation-system" />
+        <module name="components-system" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
