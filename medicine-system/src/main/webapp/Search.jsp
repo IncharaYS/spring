@@ -14,7 +14,6 @@
     <input type="text" name="medicineName"><br>
     <input type="submit" value="Submit">
 
-
 </form>
 
 <c:if test="${medicine!=null}">

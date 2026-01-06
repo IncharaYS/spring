@@ -50,4 +50,21 @@ public class MedicineController {
 
         return "Search";
     }
+
+
+
+    @GetMapping("searchById")
+    public String searchMedicineById(@RequestParam("id") int id, Model model){
+        System.out.println(id);
+
+        Optional<MedicineDTO> medicineDTO=medicineService.getMedicineById(id);
+
+        if(medicineDTO.isPresent()) {
+            model.addAttribute("medicineDto", medicineDTO.get());
+            System.out.println(medicineDTO);
+        }
+        else  model.addAttribute("DataNotFound","No Medicine found for given id");
+
+        return "SearchById";
+    }
 }

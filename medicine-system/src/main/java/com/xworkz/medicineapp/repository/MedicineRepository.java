@@ -8,4 +8,5 @@ public interface MedicineRepository {
     boolean save(MedicineDTO medicineDTO);
 
     Optional<MedicineDTO> searchByName(String medicineName);
+    Optional<MedicineDTO> searchById(int id);
 }

@@ -12,4 +12,6 @@ public interface DonerAccountService {
     DonerDTO updateDoner(DonerDTO donerDTO);
     boolean deleteByEmail(String email);
 
+    boolean deleteById(int id);
+
 }

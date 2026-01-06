@@ -5,6 +5,7 @@
 <form action="addMedicine" method="post">
 
     <a href="Search.jsp">Search</a>
+    <a href="SearchById.jsp">Search By Id</a>
     <br>
 
 

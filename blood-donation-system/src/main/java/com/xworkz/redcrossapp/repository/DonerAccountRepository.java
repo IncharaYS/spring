@@ -11,4 +11,5 @@ public interface DonerAccountRepository {
     Optional<DonerDTO> findByEmail(SearchDTO searchDTO);
     Optional<DonerDTO> update(DonerDTO donerDTO);
     boolean deleteByEmail(String email);
+    boolean deleteById(int id);
 }

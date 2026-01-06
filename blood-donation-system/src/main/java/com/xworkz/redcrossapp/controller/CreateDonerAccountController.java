@@ -89,17 +89,33 @@ public class CreateDonerAccountController {
         return "Search";
     }
 
-    @GetMapping("/delete")
-    public String deleteUser(SearchDTO searchDTO, Model model) {
+//    @GetMapping("/delete/{email}")
+//    public String deleteUser(@PathVariable("email") String email , Model model) {
+//
+//        boolean isDeleted = service.deleteByEmail(email);
+//
+//        if (isDeleted) {
+//            model.addAttribute("updateSuccessMsg",
+//                    "Doner deleted successfully for email: " + email);
+//        } else {
+//            model.addAttribute("failed",
+//                    "Failed to delete user with email: " + email);
+//        }
+//
+//        return "Search";
+//    }
 
-        boolean isDeleted = service.deleteByEmail(searchDTO.getEmail());
+    @GetMapping("/delete/{id}")
+    public String deleteUserById(@PathVariable("id") int id , Model model) {
+
+        boolean isDeleted = service.deleteById(id);
 
         if (isDeleted) {
             model.addAttribute("updateSuccessMsg",
-                    "Doner deleted successfully for email: " + searchDTO.getEmail());
+                    "Doner deleted successfully for id: " + id);
         } else {
             model.addAttribute("failed",
-                    "Failed to delete user with email: " + searchDTO.getEmail());
+                    "Failed to delete user with id: " + id);
         }
 
         return "Search";

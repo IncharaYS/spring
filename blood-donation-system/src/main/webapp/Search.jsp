@@ -143,7 +143,7 @@
         <br>
         <h2>Search Doner</h2>
 
-        <form action="search" method="get">
+        <form action="<%= request.getContextPath() %>/search" method="get">
             <div class="form-group">
                 <label>Email Address *</label>
                 <input type="email" name="email" required>
@@ -191,7 +191,7 @@
                 </a>
 
                 <a class="btn btn-sm btn-outline-primary"
-                   href="delete?email=${donerInfo.donerEmail}">
+                   href="delete/${donerInfo.id}">
                     Delete
                 </a>
             </div>

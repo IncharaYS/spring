@@ -61,4 +61,17 @@ public class MedicineServiceImpl implements MedicineService{
            return dto;
         }
     }
+
+
+    @Override
+    public Optional<MedicineDTO> getMedicineById(int id) {
+        if(id<0){
+            System.out.println("Invalid id entered");
+            return Optional.empty();
+        }
+        else{
+            Optional<MedicineDTO> dto= medicineRepository.searchById(id);
+            return dto;
+        }
+    }
 }

@@ -9,4 +9,6 @@ public interface MedicineService {
     boolean validateAndSave(MedicineDTO medicineDTO);
 
     Optional<MedicineDTO> getMedicine(String medicineName);
+
+    Optional<MedicineDTO> getMedicineById(int id);
 }

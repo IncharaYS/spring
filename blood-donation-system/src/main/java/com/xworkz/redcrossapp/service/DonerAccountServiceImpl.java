@@ -71,7 +71,7 @@ public class DonerAccountServiceImpl implements DonerAccountService{
         }
 
         else if (donerDTO.getDonorId() != null &&
-                donerDTO.getDonorId().length() < 3) {
+                donerDTO.getDonorId().length() < 2) {
 
             System.err.println("Entered donor ID is invalid");
             return isValid;
@@ -126,6 +126,7 @@ public class DonerAccountServiceImpl implements DonerAccountService{
             System.err.println("Invalid email entered");
             return Optional.empty();
         }
+
         return donerAccountRepository.findByEmail(searchDTO);
     }
 
@@ -174,6 +175,25 @@ public class DonerAccountServiceImpl implements DonerAccountService{
             System.err.println("Delete failed or email not found");
             return false;
         }
+
+    }
+        @Override
+        public boolean deleteById(int id) {
+
+            if (id<0) {
+                System.err.println("Invalid id for delete");
+                return false;
+            }
+
+            boolean deleted = donerAccountRepository.deleteById(id);
+
+            if (deleted) {
+                System.out.println("Doner deleted successfully");
+                return true;
+            } else {
+                System.err.println("Delete failed or email not found");
+                return false;
+            }
     }
 
 

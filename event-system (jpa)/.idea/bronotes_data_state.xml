@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BroNotes">
+    <option name="plainNotes">
+      <list>
+        <option value="clone,serialization and deserialization,generic,method reference,diff between hashmap and hashtable,compareTo retirn value" />
+        <option value="TreeSet how sorting and set how no duplicate,IssueCode" />
+        <option value="encription,event listener,filter,rmi" />
+        <option value="arraylist algo,singlegon" />
+        <option value="email api and read and write from and to file and exel" />
+        <option value="diffrence between get and load in hibernate" />
+      </list>
+    </option>
+  </component>
+</project>

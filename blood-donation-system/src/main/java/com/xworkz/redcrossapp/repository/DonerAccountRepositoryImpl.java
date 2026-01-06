@@ -5,6 +5,10 @@ import com.xworkz.redcrossapp.constants.DbConstants;
 import com.xworkz.redcrossapp.dto.DonerDTO;
 import com.xworkz.redcrossapp.dto.SearchDTO;
 import lombok.SneakyThrows;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -29,40 +33,53 @@ public class DonerAccountRepositoryImpl implements DonerAccountRepository{
     @SneakyThrows
     public boolean save(DonerDTO donerDTO) {
 
-        boolean isSaved = false;
+        boolean isSaved = true;
 
-        String insertQuery =
-                "INSERT INTO doner_account " +
-                        "(doner_email, doner_birth_year, doner_birth_month, doner_birth_day, " +
-                        "donor_id, doner_first_name, doner_last_name, doner_zip_code, " +
-                        "doner_username, doner_password) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?)";
+//        String insertQuery =
+//                "INSERT INTO doner_account " +
+//                        "(doner_email, doner_birth_year, doner_birth_month, doner_birth_day, " +
+//                        "donor_id, doner_first_name, doner_last_name, doner_zip_code, " +
+//                        "doner_username, doner_password) " +
+//                        "VALUES (?,?,?,?,?,?,?,?,?,?)";
+//
+//        try (Connection connection = DriverManager.getConnection(
+//                DbConstants.URL.getProperties(),
+//                DbConstants.USERNAME.getProperties(),
+//                DbConstants.PASSWORD.getProperties());
+//             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+//
+//            preparedStatement.setString(1, donerDTO.getDonerEmail());
+//            preparedStatement.setInt(2, donerDTO.getDonerBirthYear());
+//            preparedStatement.setString(3, donerDTO.getDonerBirthMonth());
+//            preparedStatement.setInt(4, donerDTO.getDonerBirthDay());
+//            preparedStatement.setString(5, donerDTO.getDonorId());
+//            preparedStatement.setString(6, donerDTO.getDonerFirstName());
+//            preparedStatement.setString(7, donerDTO.getDonerLastName());
+//            preparedStatement.setString(8, donerDTO.getDonerZipCode());
+//            preparedStatement.setString(9, donerDTO.getDonerUsername());
+//            preparedStatement.setString(10, donerDTO.getDonerPassword());
+//
+//            int rows = preparedStatement.executeUpdate();
+//            System.out.println("Doner account inserted successfully. Rows affected: " + rows);
+//
+//            isSaved = true;
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
-        try (Connection connection = DriverManager.getConnection(
-                DbConstants.URL.getProperties(),
-                DbConstants.USERNAME.getProperties(),
-                DbConstants.PASSWORD.getProperties());
-             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+        Configuration configuration=new Configuration();
+        configuration.configure();
+        configuration.addAnnotatedClass(DonerDTO.class);
 
-            preparedStatement.setString(1, donerDTO.getDonerEmail());
-            preparedStatement.setInt(2, donerDTO.getDonerBirthYear());
-            preparedStatement.setString(3, donerDTO.getDonerBirthMonth());
-            preparedStatement.setInt(4, donerDTO.getDonerBirthDay());
-            preparedStatement.setString(5, donerDTO.getDonorId());
-            preparedStatement.setString(6, donerDTO.getDonerFirstName());
-            preparedStatement.setString(7, donerDTO.getDonerLastName());
-            preparedStatement.setString(8, donerDTO.getDonerZipCode());
-            preparedStatement.setString(9, donerDTO.getDonerUsername());
-            preparedStatement.setString(10, donerDTO.getDonerPassword());
+        SessionFactory sessionFactory=configuration.buildSessionFactory();
+        Session session=sessionFactory.openSession();
 
-            int rows = preparedStatement.executeUpdate();
-            System.out.println("Doner account inserted successfully. Rows affected: " + rows);
+        Transaction transaction=session.beginTransaction();
 
-            isSaved = true;
+        session.save(donerDTO);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        transaction.commit();
 
         return isSaved;
     }
@@ -86,6 +103,7 @@ public class DonerAccountRepositoryImpl implements DonerAccountRepository{
                 if (rs.next()) {
                     DonerDTO donerDTO = new DonerDTO();
                     donerDTO.setDonerEmail(rs.getString("doner_email"));
+                    donerDTO.setId(rs.getInt("doner_account_id"));
                     donerDTO.setDonerBirthYear(rs.getInt("doner_birth_year"));
                     donerDTO.setDonerBirthMonth(rs.getString("doner_birth_month"));
                     donerDTO.setDonerBirthDay(rs.getInt("doner_birth_day"));
@@ -168,6 +186,34 @@ public class DonerAccountRepositoryImpl implements DonerAccountRepository{
 
             return rows > 0;
         }
+    }
+
+    public boolean deleteById(int id){
+
+        boolean isDeleted=false;
+
+        Configuration configuration=new Configuration();
+        configuration.configure();
+        configuration.addAnnotatedClass(DonerDTO.class);
+
+        SessionFactory sessionFactory=configuration.buildSessionFactory();
+        Session session=sessionFactory.openSession();
+
+        Transaction transaction=session.beginTransaction();
+
+        DonerDTO donerDTO=session.get(DonerDTO.class,id);
+        if(donerDTO!=null){
+
+            System.out.println("DTO is not null");
+            session.delete(donerDTO);
+            isDeleted=true;
+        }
+
+
+        transaction.commit();
+
+        return isDeleted;
+
     }
 
 }
