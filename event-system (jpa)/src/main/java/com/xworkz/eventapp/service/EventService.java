@@ -1,8 +1,8 @@
 package com.xworkz.eventapp.service;
 
 import com.xworkz.eventapp.dto.EventDTO;
-import com.xworkz.eventapp.entity.EventEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface EventService {
@@ -10,5 +10,27 @@ public interface EventService {
      Optional<EventDTO> getById(int id);
     boolean deleteById(int id);
 
-    public boolean updateEventTimeById(int id,String time);
+    boolean updateEventTimeById(int id,String time);
+
+    Optional<EventDTO> getEventByEventName(String eventName);
+
+    boolean updateEventTimeByName(String eventName,String time);
+
+    List<EventDTO> getEvents();
+
+    List<EventDTO>getEventByEventLocation(String eventLocation);
+
+    List<EventDTO> getEventByEventManager(String eventManager);
+
+    List<EventDTO> getEventByEventTime(String eventTime);
+
+    Object[] getManagerAndLocationByEventName(String eventName);
+
+    List<String> getLocationByTime(String time);
+
+    String getNameByManager(String manager);
+
+    List<String> getMangers();
+
+
 }
