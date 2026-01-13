@@ -2,11 +2,14 @@ package com.xworkz.redcrossapp.service;
 
 import com.xworkz.redcrossapp.dto.DonerDTO;
 import com.xworkz.redcrossapp.dto.SearchDTO;
+import com.xworkz.redcrossapp.entity.DonerEntity;
 import com.xworkz.redcrossapp.repository.DonerAccountRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Component
@@ -23,7 +26,9 @@ public class DonerAccountServiceImpl implements DonerAccountService{
         boolean isSaved = false;
 
         if (isValid) {
-            isSaved = donerAccountRepository.save(donerDTO);
+            DonerEntity donerEntity=new DonerEntity();
+            BeanUtils.copyProperties(donerDTO,donerEntity);
+            isSaved = donerAccountRepository.save(donerEntity);
 
             if (isSaved)
                 System.out.println("Successfully saved donor account data");
@@ -42,22 +47,19 @@ public class DonerAccountServiceImpl implements DonerAccountService{
 
         boolean isValid = false;
 
-        if (donerDTO.getDonerEmail() == null ||
-                !donerDTO.getDonerEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+        if (donerDTO.getDonerEmail() == null) {
 
             System.err.println("Entered email is invalid");
             return isValid;
         }
 
-        else if (donerDTO.getDonerBirthYear() <= 1900 ||
-                donerDTO.getDonerBirthYear() > java.time.Year.now().getValue()) {
+        else if (donerDTO.getDonerBirthYear() <= 1900 ) {
 
             System.err.println("Entered birth year is invalid");
             return isValid;
         }
 
-        else if (donerDTO.getDonerBirthMonth() == null ||
-                donerDTO.getDonerBirthMonth().length() < 3) {
+        else if (donerDTO.getDonerBirthMonth() == null ) {
 
             System.err.println("Entered birth month is invalid");
             return isValid;
@@ -84,8 +86,7 @@ public class DonerAccountServiceImpl implements DonerAccountService{
             return isValid;
         }
 
-        else if (donerDTO.getDonerLastName() == null ||
-                donerDTO.getDonerLastName().length() < 2) {
+        else if (donerDTO.getDonerLastName() == null ) {
 
             System.err.println("Entered last name is invalid");
             return isValid;
@@ -121,41 +122,53 @@ public class DonerAccountServiceImpl implements DonerAccountService{
     }
 
     @Override
-    public Optional<DonerDTO> validateAndSearchByEmail(SearchDTO searchDTO) {
-        if (searchDTO.getEmail() == null || searchDTO.getEmail().length() < 6) {
+    public Optional<DonerDTO> validateAndSearchByEmail(String email) {
+
+        if (email== null ||email.length() < 6) {
             System.err.println("Invalid email entered");
             return Optional.empty();
         }
 
-        return donerAccountRepository.findByEmail(searchDTO);
+        Optional<DonerEntity> donerEntity=donerAccountRepository.findByEmail(email);
+        DonerDTO donerDTO=new DonerDTO();
+        BeanUtils.copyProperties(donerEntity.get(),donerDTO);
+
+
+        return Optional.of(donerDTO);
     }
 
 
     @Override
-    public DonerDTO updateDoner(DonerDTO donerDTO) {
+    public boolean updateDoner(DonerDTO donerDTO) {
 
         boolean isInvalid = false;
 
         if (donerDTO == null) {
             System.err.println("DTO is empty");
-            return null;
+            return isInvalid;
         }
 
-        isInvalid = validateFields(donerDTO);
+//        isInvalid = validateFields(donerDTO);
+//
+//        if (isInvalid) {
+//            System.err.println("Invalid doner data");
+//        }
 
-        if (isInvalid) {
-            System.err.println("Invalid doner data");
-        }
+        DonerEntity donerEntity=new DonerEntity();
 
-        Optional<DonerDTO> updated = donerAccountRepository.update(donerDTO);
+        BeanUtils.copyProperties(donerDTO,donerEntity);
 
-        if (updated.isPresent()) {
+        boolean updated = donerAccountRepository.update(donerEntity);
+
+
+
+        if (updated==true) {
             System.out.println("Doner updated successfully");
-            return updated.get();
+            return true;
         } else {
             System.err.println("Failed to update doner");
         }
-            return null;
+            return false;
     }
 
     @Override

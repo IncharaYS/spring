@@ -48,7 +48,7 @@ pageEncoding="UTF-8"%>
     <div class="form-section">
         <h2>Create My Account</h2>
 
-        <form action="addDoner" method="post">
+        <form action="<%= request.getContextPath() %>/addDoner" method="post">
 
             <div class="form-group">
                 <label>Email Address *</label>

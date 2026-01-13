@@ -8,10 +8,9 @@ import java.util.Optional;
 public interface DonerAccountService {
 
     boolean validateAndSave(DonerDTO donerDTO);
-    Optional<DonerDTO> validateAndSearchByEmail(SearchDTO searchDTO);
-    DonerDTO updateDoner(DonerDTO donerDTO);
+    Optional<DonerDTO> validateAndSearchByEmail(String email);
+    boolean updateDoner(DonerDTO donerDTO);
     boolean deleteByEmail(String email);
-
     boolean deleteById(int id);
 
 }

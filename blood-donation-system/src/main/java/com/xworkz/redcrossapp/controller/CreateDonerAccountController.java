@@ -24,8 +24,9 @@ public class CreateDonerAccountController {
     @PostMapping("/addDoner")
     public String addDoner(@ModelAttribute DonerDTO dto, Model model){
         System.out.println("Received DTO: " + dto);
-
         boolean success = service.validateAndSave(dto);
+
+
         if(success){
             System.out.println("Data validated and saved successfully");
             model.addAttribute("successMsg","Data added successfully");
@@ -40,9 +41,9 @@ public class CreateDonerAccountController {
     @GetMapping("/search")
     public String search( SearchDTO searchDTO, Model model) {
 
-        searchDTO.setEmail(searchDTO.getEmail());
+       searchDTO.setEmail(searchDTO.getEmail());
 
-        Optional<DonerDTO> result = service.validateAndSearchByEmail(searchDTO);
+        Optional<DonerDTO> result = service.validateAndSearchByEmail(searchDTO.getEmail());
 
         if (result.isPresent()) {
             System.out.println("Successfully fetched data");
@@ -59,14 +60,18 @@ public class CreateDonerAccountController {
         return "Search";
     }
 
+    @GetMapping("registerNav")
+    public String registerNav(){return "Register";}
+
     @GetMapping("update")
     public String update(SearchDTO searchDTO,Model model){
+
         searchDTO.setEmail(searchDTO.getEmail());
 
-        Optional<DonerDTO> result = service.validateAndSearchByEmail(searchDTO);
+        Optional<DonerDTO> result = service.validateAndSearchByEmail(searchDTO.getEmail());
 
         if (result.isPresent()) {
-            System.out.println("Successfully fetched data");
+            System.out.println("Successfully updated data");
             model.addAttribute("donerInfo", result.get());
         } else {
             model.addAttribute("emailNotFound", "No user found with email: " + searchDTO.getEmail());
@@ -77,9 +82,10 @@ public class CreateDonerAccountController {
     @PostMapping("/updateDoner")
     public String updateDoner(DonerDTO donerDTO, Model model) {
 
-            DonerDTO updatedDoner = service.updateDoner(donerDTO);
-            if(updatedDoner!=null) {
-                model.addAttribute("donerInfo", updatedDoner);
+            boolean updatedDoner = service.updateDoner(donerDTO);
+            System.out.println(donerDTO);
+            if(updatedDoner==true) {
+                model.addAttribute("donerInfo", donerDTO);
                 model.addAttribute("updateSuccessMsg", "Doner updated successfully");
             }
             else {

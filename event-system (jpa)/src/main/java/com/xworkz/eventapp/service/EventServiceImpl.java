@@ -185,7 +185,7 @@ public class EventServiceImpl implements EventService{
 
         if (!eventEntities.isEmpty()) {
 
-            eventEntities.stream().forEach(entity -> {
+            eventEntities.forEach(entity -> {
                 EventDTO dto = new EventDTO();
                 BeanUtils.copyProperties(entity, dto);
                 eventDTOList.add(dto);

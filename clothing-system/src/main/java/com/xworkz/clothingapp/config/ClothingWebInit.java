@@ -1,4 +1,4 @@
-package com.xworkz.redcrossapp.config;
+package com.xworkz.clothingapp.config;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -6,9 +6,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-@Component
 @EnableWebMvc
-public class RedCrossBloodWebInit extends AbstractAnnotationConfigDispatcherServletInitializer implements WebMvcConfigurer {
+@Component
+public class ClothingWebInit extends AbstractAnnotationConfigDispatcherServletInitializer implements WebMvcConfigurer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[0];
@@ -17,15 +17,16 @@ public class RedCrossBloodWebInit extends AbstractAnnotationConfigDispatcherServ
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{
-                RedCrossBloodConfiguration.class
+                ClothingConfigurations.class
         };
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/"};
+        return new String[]{
+                "/"
+        };
     }
-
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();

@@ -136,6 +136,8 @@ pageEncoding="UTF-8"%>
 
         <form action="updateDoner" method="post">
 
+            <input name = "id" value="${donerInfo.id}" hidden>
+
             <div class="form-group">
                 <label>Email *</label>
                 <input type="email" value="${donerInfo.donerEmail}" disabled>
