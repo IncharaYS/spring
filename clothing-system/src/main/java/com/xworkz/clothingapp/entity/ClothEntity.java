@@ -32,7 +32,8 @@ import javax.persistence.*;
         @NamedQuery(name = "findClothsByAvailabilityStatus", query = "from ClothEntity c where c.availabilityStatus=:status and c.isDeleted=0"),
         @NamedQuery(name = "findClothsByPrice", query = "from ClothEntity c where c.price = :price and c.isDeleted=0"),
         @NamedQuery(name = "findClothsByStockQuantity", query = "from ClothEntity c where c.stockQuantity = :stockQty and c.isDeleted=0"),
-        @NamedQuery(name = "deleteById",query = "update ClothEntity c set c.isDeleted=1 where c.clothId=:eId and c.isDeleted=0")
+        @NamedQuery(name = "deleteById",query = "update ClothEntity c set c.isDeleted=1 where c.clothId=:eId and c.isDeleted=0"),
+        @NamedQuery(name = "updateCloth",query = "update ClothEntity c set c.clothName=:cName,c.brandName=:bName,c.categoryName=:catName,c.size=:size,c.color=:color,c.price=:price,c.stockQuantity=:quant,c.availabilityStatus=:status where c.clothId=:cId")
 })
 
 public class ClothEntity {

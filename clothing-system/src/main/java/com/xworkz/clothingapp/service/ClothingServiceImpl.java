@@ -6,6 +6,7 @@ import com.xworkz.clothingapp.exception.DuplicateClothNameException;
 import com.xworkz.clothingapp.repository.ClothingRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -102,7 +103,18 @@ public class ClothingServiceImpl implements ClothingService{
         return isDeleted;
     }
 
+    @Override
+    public boolean updateCloth(ClothDTO clothDTO) {
+        boolean isUpdated=false;
 
+        if (validateClothInfo(clothDTO)){
+            ClothEntity cloth=new ClothEntity();
+            BeanUtils.copyProperties(clothDTO,cloth);
+           isUpdated=clothingRepository.updateCloth(cloth);
+        }
+
+        return isUpdated;
+    }
 
 
     @Override

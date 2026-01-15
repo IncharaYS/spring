@@ -16,6 +16,8 @@ public interface ClothingService {
 
     boolean deleteById(int clothId);
 
+    boolean updateCloth(ClothDTO clothDTO);
+
 
     Optional<ClothDTO> findClothInfoByClothName(String clothName);
 

@@ -57,7 +57,7 @@ public class RedCrossBloodConfiguration {
 
         return  properties;
     }
-
+    
     @Bean
     public LocalContainerEntityManagerFactoryBean getEntityManagerFactory(){
         LocalContainerEntityManagerFactoryBean factoryBean=new LocalContainerEntityManagerFactoryBean();

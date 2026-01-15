@@ -94,10 +94,32 @@ public class ClothingRepositoryImpl implements ClothingRepository{
         return isDeleted;
     }
 
+    @Override
+    public boolean updateCloth(ClothEntity clothEntity) {
+            boolean isUpdated = false;
 
+            try {
+                EntityManager entityManager = entityManagerFactory.createEntityManager();
+                entityManager.getTransaction().begin();
 
+                Query query = entityManager.createNamedQuery("updateCloth");
 
+                int rowsUpdated = query.setParameter("cName", clothEntity.getClothName()).setParameter("bName", clothEntity.getBrandName()).setParameter("catName", clothEntity.getCategoryName()).setParameter("size", clothEntity.getSize())
+                        .setParameter("color", clothEntity.getColor()).setParameter("price", clothEntity.getPrice()).setParameter("quant", clothEntity.getStockQuantity()).setParameter("status", clothEntity.getAvailabilityStatus()).setParameter("cId", clothEntity.getClothId()).executeUpdate();
 
+                entityManager.getTransaction().commit();
+
+                if (rowsUpdated > 0) {
+                    isUpdated = true;
+                    System.out.println("Successfully updated");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return isUpdated;
+        }
 
 
     @Override

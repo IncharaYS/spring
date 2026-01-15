@@ -55,8 +55,10 @@
 <nav class="navbar navbar-expand-lg p-2">
     <div class="container-fluid">
         <a class="navbar-brand fs-3">Clothing Company</a>
+        <ul>
         <li class="nav-item"><a class="nav-link" href="searchPage">Search</a></li>
-    </div>sf
+        </ul>
+    </div>
 </nav>
 
 <div class="container py-5 d-flex justify-content-center">
@@ -64,7 +66,6 @@
 
         <c:if test="${successMsg != null}">
             <h4 class="text-center text-success mb-4">${successMsg}</h4>
-
         </c:if>
 
         <c:if test="${clothDto != null}">

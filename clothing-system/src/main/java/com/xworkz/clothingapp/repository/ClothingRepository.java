@@ -1,5 +1,6 @@
 package com.xworkz.clothingapp.repository;
 
+import com.xworkz.clothingapp.dto.ClothDTO;
 import com.xworkz.clothingapp.entity.ClothEntity;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface ClothingRepository {
     boolean updatePriceById(int cId, double updatedPrice);
 
     boolean deleteById(int clothId);
+
+    boolean updateCloth(ClothEntity clothEntity);
 
 
 

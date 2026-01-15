@@ -195,5 +195,36 @@ public class ClothingController {
 
 
 
+    @GetMapping("/updateClothPage")
+    public String updateClothPage(@RequestParam int id, Model model) {
+
+        Optional<ClothDTO> optionalCloth = clothingService.findClothInfoById(id);
+
+        if (optionalCloth.isPresent()) {
+            model.addAttribute("clothDto", optionalCloth.get());
+        } else {
+            model.addAttribute("errorMsg", "Cloth not found with ID : " + id);
+        }
+
+        return "UpdateCloth";
+    }
+
+
+
+    @PostMapping("/updateCloth")
+    public String updateCloth(ClothDTO dto, Model model) {
+        boolean updated = clothingService.updateCloth(dto);
+
+        if (!updated) {
+            model.addAttribute("errorMsg", "Update failed");
+            model.addAttribute("clothDto", dto);
+            return "UpdateCloth";
+        }
+        model.addAttribute("successMsg", "Cloth updated successfully");
+        model.addAttribute("clothDto", dto);
+        return "SearchCloth";
+    }
+
+
 
 }

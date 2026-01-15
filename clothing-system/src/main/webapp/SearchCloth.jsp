@@ -85,8 +85,11 @@
 
 <div class="container d-flex justify-content-center py-5">
     <div class="card shadow-lg rounded-4 p-4 w-100" style="max-width:900px;">
+        <h4 class="text-center text-success mb-4">${successMsg}</h4>
+
 
         <h3 class="text-center mb-4" style="color:#000080;">Search  Cloths</h3>
+
 
         <form action="searchCloth" method="get">
 
@@ -144,16 +147,18 @@
                 <tr><th>Update</th>
                 <td>
                     <a class="btn btn-sm btn-outline-primary"
-                       href="update?id=${cloth.clothId}">
+                       href="updateClothPage?id=${cloth.clothId}">
                         Update
                     </a>
                 </td></tr>
                 <tr><th>Delete</th>
                 <td>
-                    <a class="btn btn-sm btn-outline-primary"
-                       href="delete?id=${cloth.clothId}">
+                    <a class="btn btn-sm btn-outline-danger"
+                       href="delete?id=${cloth.clothId}"
+                       onclick="return confirmDelete();">
                         Delete
                     </a>
+
                 </td></tr>
             </table>
         </c:if>
@@ -192,15 +197,17 @@
                         <td>${c.availabilityStatus}</td>
                         <td>
                             <a class="btn btn-sm btn-outline-primary"
-                               href="update?id=${c.clothId}">
+                               href="updateClothPage?id=${c.clothId}">
                                 Update
                             </a>
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary"
-                               href="delete?id=${c.clothId}">
+                            <a class="btn btn-sm btn-outline-danger"
+                               href="delete?id=${c.clothId}"
+                               onclick="return confirmDelete();">
                                 Delete
                             </a>
+
                         </td>
                     </tr>
                 </c:forEach>
@@ -210,6 +217,13 @@
 
     </div>
 </div>
+
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this cloth?\nThis action cannot be undone.");
+    }
+</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
