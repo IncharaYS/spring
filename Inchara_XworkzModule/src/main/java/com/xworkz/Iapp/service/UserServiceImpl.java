@@ -1,12 +1,10 @@
 package com.xworkz.Iapp.service;
 
+import com.xworkz.Iapp.constants.IssueCode;
+import com.xworkz.Iapp.dto.LoginDTO;
 import com.xworkz.Iapp.dto.UserDTO;
 import com.xworkz.Iapp.entity.UserEntity;
-import com.xworkz.Iapp.exceptions.DuplicateEmailException;
-import com.xworkz.Iapp.exceptions.EmailNotRegisteredException;
-import com.xworkz.Iapp.exceptions.InvalidPasswordException;
 import com.xworkz.Iapp.repository.UserRepository;
-import com.xworkz.Iapp.repository.UserRepositoryImpl;
 import com.xworkz.Iapp.util.Encryption;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,124 +12,110 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.xworkz.Iapp.constants.IssueCode.DBERROR;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
+//    @Autowired
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
-    public boolean validateAndSave(UserDTO userDTO) {
+    public IssueCode validateAndSave(UserDTO userDTO) {
 
-        boolean isValidated = validateUserInfo(userDTO);
-        boolean isSaved = false;
-
-        if (!isValidated) {
-            System.err.println("User data not validated");
-            return false;
+        if(!checkConfirmPassword(userDTO.getPassword(),userDTO.getConfirmPassword())){
+            return IssueCode.PASSWORDMISMATCH;
         }
 
         Optional<UserEntity> existingUser = userRepository.findByEmail(userDTO.getEmail());
 
         if (existingUser.isPresent()) {
             System.err.println("Email already exists: " + userDTO.getEmail());
-            throw new DuplicateEmailException("Email already exists");
+            return IssueCode.EMAILEXISTS;
         }
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDTO, userEntity);
+        if(userRepository.findByPhoneNo(userDTO.getPhoneNo()).isPresent()){
+            System.err.println("Entered phone number already exists");
+            return IssueCode.PHONENOEXISTS;
+        }
 
-        userEntity.setPassword(Encryption.encrypt(userDTO.getPassword()));
+            System.out.println(userDTO);
+            UserEntity userEntity = new UserEntity();
+            BeanUtils.copyProperties(userDTO, userEntity);
 
+//        userEntity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
-        try {
-            isSaved = userRepository.save(userEntity);
+            userEntity.setPassword(Encryption.encrypt(userDTO.getPassword()));
+
+            System.out.println(userEntity);
+
+            boolean isSaved = userRepository.save(userEntity);
 
             if (isSaved) {
                 System.out.println("User saved successfully");
             } else {
                 System.err.println("Failed to save user");
+                return DBERROR;
             }
-        } catch (Exception e) {
-            System.err.println("Exception while saving user: " + e.getMessage());
-            isSaved = false;
-        }
 
-        return isSaved;
+        return IssueCode.ALLOK;
     }
 
 
-    private boolean validateUserInfo(UserDTO userDTO) {
 
-        if (userDTO.getUserName() == null || userDTO.getUserName().trim().isEmpty()) {
-            System.err.println("Invalid user name");
-            return false;
+    @Override
+    public IssueCode validateLogin(LoginDTO loginDTO) {
+
+        Optional<UserEntity> user = userRepository.findByEmail(loginDTO.getEmail());
+
+        if (!user.isPresent()) {
+            return IssueCode.EMAILNOTREGISTERED;
         }
 
-        if (userDTO.getEmail() == null || userDTO.getEmail().trim().isEmpty()) {
-            System.err.println("Invalid email");
-            return false;
-        }
+        UserEntity entity = user.get();
 
-        if (userDTO.getPhoneNo() <= 0) {
-            System.err.println("Invalid phone number");
-            return false;
-        }
+        if(entity.getInvalidPasswordCount()<3) {
 
-        if (userDTO.getAge() <= 0) {
-            System.err.println("Invalid age");
-            return false;
-        }
+            String decryptedPassword = Encryption.decrypt(entity.getPassword());
+            if (!decryptedPassword.equals(loginDTO.getPassword())) {
 
-        if (userDTO.getGender() == null || userDTO.getGender().trim().isEmpty()) {
-            System.err.println("Invalid gender");
-            return false;
-        }
+//            if(bCryptPasswordEncoder.matches(userDTO.getPassword(), entity.getPassword())){
 
-        if (userDTO.getAddress() == null || userDTO.getAddress().trim().isEmpty()) {
-            System.err.println("Invalid address");
-            return false;
-        }
+                userRepository.incrementCount(loginDTO.getEmail());
+                return IssueCode.INVALIDPWD;
+            }
 
-        if (userDTO.getPassword() == null || userDTO.getPassword().trim().isEmpty()) {
-            System.err.println("Invalid password");
-            return false;
+            return IssueCode.ALLOK;
         }
-
-        if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-            System.err.println("Password and confirm password do not match");
-            return false;
+        else {
+            System.out.println("Entered invalid password 3 or more times");
+            return IssueCode.PWDTRIESLIMITREACHED;
         }
-
-        return true;
     }
 
     @Override
-    public UserDTO validateLogin(UserDTO userDTO) {
+    public Optional<UserDTO> findByEmail(String email) {
 
-        Optional<UserEntity> userOpt = userRepository.findByEmail(userDTO.getEmail());
+        Optional<UserEntity> user=userRepository.findByEmail(email);
 
-        if (!userOpt.isPresent()) {
-            throw new EmailNotRegisteredException("Email is not registered. Please register first.");
+        System.out.println(user);
+        if(user.isPresent()){
+            UserDTO dto=new UserDTO();
+            BeanUtils.copyProperties(user.get(),dto);
+
+            System.out.println(dto);
+            return Optional.of(dto);
         }
 
-        UserEntity entity = userOpt.get();
-
-        String decryptedPassword = Encryption.decrypt(entity.getPassword());
-
-        if (!decryptedPassword.equals(userDTO.getPassword())) {
-            throw new InvalidPasswordException("Incorrect password. Please try again.");
-        }
-        UserDTO dto = new UserDTO();
-        BeanUtils.copyProperties(entity, dto);
-
-
-
-        return dto;
+        return Optional.empty();
     }
 
 
-
-
+    private boolean checkConfirmPassword(String password,String cPassword){
+        return password.equals(cPassword);
+    }
 }

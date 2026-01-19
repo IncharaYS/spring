@@ -81,7 +81,7 @@
         <hr>
 
 
-        <c:if test="${userInfo != null}">
+        <c:if test="${userInfo!=null}">
             <div class="px-3">
                 <p><strong>Name:</strong> ${userInfo.userName}</p>
                 <p><strong>Email:</strong> ${userInfo.email}</p>

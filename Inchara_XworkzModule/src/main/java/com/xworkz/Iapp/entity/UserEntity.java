@@ -12,7 +12,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name="findByEmail", query = "SELECT u FROM UserEntity u WHERE u.email=:email")
+        @NamedQuery(name="findByPhoneNo", query="select u from UserEntity u where u.phoneNo=:phoneNo"),
+        @NamedQuery(name="findByEmail", query="select u from UserEntity u where u.email=:email"),
+        @NamedQuery(name = "incrementCount", query="update UserEntity u set u.invalidPasswordCount=u.invalidPasswordCount+1 where u.email=:email")
 })
 
 public class UserEntity {
@@ -20,19 +22,29 @@ public class UserEntity {
     @Id
     @Column(name = "id")
     private int userId;
+
     @Column(name = "name")
     private String userName;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "phone_no")
-    private long phoneNo;
+    private String phoneNo;
+
     @Column(name = "age")
-    private int age;
+    private String age;
+
     @Column(name = "gender")
     private String gender;
+
     @Column(name = "address")
     private String address;
+
     @Column(name = "password")
     private String password;
+
+    @Column(name = "invalidPasswordCount")
+    private  int invalidPasswordCount;
 
 }

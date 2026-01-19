@@ -6,12 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.Optional;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -19,8 +18,6 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public boolean save(UserEntity userEntity) {
-
-        boolean isSaved = false;
 
         try {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -32,14 +29,12 @@ public class UserRepositoryImpl implements UserRepository{
             entityManager.getTransaction().commit();
             entityManager.close();
 
-            isSaved = true;
+            return true;
 
         }
         catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
-
-        return isSaved;
     }
 
 
@@ -54,16 +49,57 @@ public class UserRepositoryImpl implements UserRepository{
 
             UserEntity userEntity = (UserEntity) query.getSingleResult();
 
-            if (userEntity != null) {
-                return Optional.of(userEntity);
-            }
+            return Optional.of(userEntity);
+        }
 
-        } catch (NoResultException nre) {
+        catch (Exception e) {
             return Optional.empty();
-        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    public Optional<UserEntity> findByPhoneNo(String phoneNo) {
+
+        try {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+            Query query = entityManager.createNamedQuery("findByPhoneNo");
+            query.setParameter("phoneNo", phoneNo);
+
+            UserEntity userEntity = (UserEntity) query.getSingleResult();
+
+            return Optional.of(userEntity);
+        }
+
+        catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+
+    @Override
+    public void incrementCount(String email) {
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+
+            Query query = entityManager.createNamedQuery("incrementCount");
+            query.setParameter("email", email);
+            int rowsUpdated= query.executeUpdate();
+
+            entityManager.getTransaction().commit();
+
+            if(rowsUpdated>0){
+                System.out.println("Increment successful");
+            }
+            else System.out.println("Increment failed");
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
 
-        return Optional.empty();
     }
 }
+

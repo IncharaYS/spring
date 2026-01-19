@@ -65,4 +65,9 @@ public class UserConfiguration {
 
         return beanFactory;
     }
+
+//    @Bean
+//    BCryptPasswordEncoder bCryptPasswordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
 }
