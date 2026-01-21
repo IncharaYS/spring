@@ -13,11 +13,12 @@ import javax.validation.constraints.Size;
 public class LoginDTO {
 
     @NotBlank(message = "Please enter email")
-    @Size(min = 6,max = 20,message = "email should be between 6-20 characters")
-    @Email(message = "Enter valid email")
+    @Size(min =1,max = 50,message = "email should be between 6-20 characters")
+//    @Email(message = "Enter valid email")
     private String email;
 
     @NotBlank(message = "Please enter password")
     @Pattern(regexp ="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$" ,message = "Password must be at least 8 characters and include uppercase, lowercase, number & special character")
     private String password;
+
 }

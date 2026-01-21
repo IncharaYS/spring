@@ -1,5 +1,6 @@
 package com.xworkz.Iapp.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,29 +8,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@Component
-@ComponentScan(basePackages = "com.xworkz.Iapp")
-public class UserConfiguration {
-
-    public UserConfiguration(){
-        System.out.println("User configuration class initialized");
-    }
-
-
-    @Bean
-    public ViewResolver ViewResolver(){
-        InternalResourceViewResolver viewResolver=new InternalResourceViewResolver();
-        viewResolver.setPrefix("/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
+public class PersistenceConfiguration {
 
     @Bean
     public DataSource getDataSource(){
@@ -65,9 +49,4 @@ public class UserConfiguration {
 
         return beanFactory;
     }
-
-//    @Bean
-//    BCryptPasswordEncoder bCryptPasswordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
 }

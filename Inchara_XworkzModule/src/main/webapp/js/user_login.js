@@ -1,16 +1,44 @@
-function validateLoginEmail(input) {
+console.log("user_login.js loaded");
+
+async function validateLoginEmail(input) {
+    const email = input.value.trim();
     const msg = document.getElementById("emailMsg");
-    const value = input.value.trim();
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (value === "") {
+    if (email === "") {
         msg.textContent = "Email is required";
-    } else if (!pattern.test(value)) {
-        msg.textContent = "Enter a valid email address";
-    } else {
-        msg.textContent = "";
+        return;
+    }
+
+    else  if (!pattern.test(email)) {
+        console.log("inside else if");
+        msg.textContent = "Entered email is not valid";
+        return;
+    }
+    else{
+    console.log("inside else");
+    try {
+
+        const response = await axios(
+            "http://localhost:8082/Inchara_XworkzModule/checkEmailExists?email="+email);
+
+        console.log(response);
+        if (response.data === false) {
+            msg.textContent = "Your email is not registered";
+                    return;
+        } else {
+            msg.textContent = "";
+                    return;
+        }
+
+    } catch (e) {
+        console.error(e);
+        msg.textContent = "Server error";
+                return;
+    }
     }
 }
+
 
 function validateLoginPassword(input) {
     const msg = document.getElementById("passwordMsg");

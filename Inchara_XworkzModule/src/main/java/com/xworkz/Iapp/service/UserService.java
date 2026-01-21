@@ -18,5 +18,9 @@ public interface UserService {
 
     Optional<UserDTO> findByEmail(String email);
 
+    boolean emailExists(String email);
+
+    boolean phoneNoExists(String phoneNo);
+
 
 }

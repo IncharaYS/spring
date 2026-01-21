@@ -99,6 +99,7 @@ public class UserController{
     public ModelAndView login(@Valid @ModelAttribute LoginDTO loginDTO, BindingResult bindingResult, ModelAndView model) {
 
         if (bindingResult.hasErrors()){
+            System.out.println(bindingResult.getAllErrors());
             bindingResult.getFieldErrors().
                     forEach(error-> model.addObject(error.getField()+"Error",error.getDefaultMessage()));
             model.setViewName("UserLogin");
@@ -123,13 +124,19 @@ public class UserController{
 
 
                 case INVALIDPWD:
+                    Optional<UserDTO> user1 =userService.findByEmail(loginDTO.getEmail());
+                    int count=user1.get().getInvalidPasswordCount();
+
+                    if(count<3) model.addObject("triesLeft",3-count);
                     model.addObject("failureMsg",IssueCode.INVALIDPWD.getMessage());
                     model.addObject("userInfo", loginDTO);
+
                     model.setViewName("UserLogin");
                     return model;
 
                 case ALLOK:
                     Optional<UserDTO> user =userService.findByEmail(loginDTO.getEmail());
+
                     if (user.isPresent()) {
                         model.addObject("userName", user.get().getUserName());
                         model.addObject("userInfo", user.get());

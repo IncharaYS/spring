@@ -1,6 +1,7 @@
-package com.xworkz.Iapp.config;
+package com.xworkz.Iapp.init;
 
-import org.springframework.context.annotation.ComponentScan;
+import com.xworkz.Iapp.config.PersistenceConfiguration;
+import com.xworkz.Iapp.config.WebAppConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -18,7 +19,7 @@ public class UserWebInit extends AbstractAnnotationConfigDispatcherServletInitia
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{
-                UserConfiguration.class
+                WebAppConfiguration.class, PersistenceConfiguration.class
         };
     }
 

@@ -11,30 +11,64 @@ function validateUserName(input) {
     }
 }
 
-function validateEmail(input) {
+async function validateEmail(input) {
+    const email = input.value.trim();
     const msg = document.getElementById("emailMsg");
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (input.value.trim() === "") {
+    if (email === "") {
         msg.textContent = "Email is required";
-    } else if (!pattern.test(input.value)) {
-        msg.textContent = "Invalid email format";
-    } else {
-        msg.textContent = "";
+        return;
+    }
+
+    else  if (!pattern.test(email)) {
+        msg.textContent = "Entered email is not valid";
+        return;
+    }
+
+    else{try {
+        const response = await axios(
+            "http://localhost:8082/Inchara_XworkzModule/checkEmailExists?email="+email);
+
+        if (response.data === true) {
+            msg.textContent = "Your email is already registered";
+        } else {
+            msg.textContent = "";
+        }
+
+    } catch (e) {
+        console.error(e);
+        msg.textContent = "Server error";
+    }
     }
 }
 
-function validatePhoneNo(input) {
+
+async function validatePhoneNo(input) {
+    const phoneNo=input.value.trim();
     const msg = document.getElementById("phoneNoMsg");
     const pattern = /^[6-9][0-9]{9}$/;
 
-    if (input.value.trim() === "") {
+    if (phoneNo === "") {
         msg.textContent = "Phone number is required";
-    } else if (!pattern.test(input.value)) {
+    } else if (!pattern.test(phoneNo)) {
         msg.textContent = "Phone must start with 6,7,8 or 9 and be 10 digits";
-    } else {
-        msg.textContent = "";
     }
+     else{  try {
+              const response = await axios(
+                  "http://localhost:8082/Inchara_XworkzModule/checkPhoneNoExists?phoneNo="+phoneNo);
+
+              if (response.data === true) {
+                  msg.textContent = "Your phone number is already registered";
+              } else {
+                  msg.textContent = "";
+              }
+
+          } catch (e) {
+              console.error(e);
+              msg.textContent = "Server error";
+          }
+      }
 }
 
 function validateAge(input) {
@@ -62,9 +96,13 @@ function validateAddress(input) {
 
     if (input.value.trim() === "") {
         msg.textContent = "Address is required";
-    } else {
+    } else if (input.value.trim().length<10){
+        msg.textContent = "Address must be at least 10 characters";
+        }
+        else{
         msg.textContent = "";
-    }
+        }
+
 }
 
 function validatePassword(input) {

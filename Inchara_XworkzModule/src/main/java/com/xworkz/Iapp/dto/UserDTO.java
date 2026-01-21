@@ -49,5 +49,7 @@ public class UserDTO implements Serializable {
 
     private String confirmPassword;
 
+    private  int invalidPasswordCount;
+
 
 }

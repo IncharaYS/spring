@@ -4,12 +4,12 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
-public class Encryption{
+public class EncryptionUtil {
 
     private static final String ALGORITHM = "AES";
     private static final String SECRET_KEY = "MySuperSecretKey";
 
-    private Encryption() {
+    private EncryptionUtil() {
     }
 
     public static String encrypt(String data) {
@@ -19,6 +19,7 @@ public class Encryption{
 
         try {
             System.out.println("Password being encrypted:"+data);
+
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             SecretKeySpec key=new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, key);

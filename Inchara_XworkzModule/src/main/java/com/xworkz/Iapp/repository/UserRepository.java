@@ -13,4 +13,7 @@ public interface UserRepository {
     void incrementCount(String email);
 
     Optional<UserEntity> findByPhoneNo(String phoneNo);
+
+    boolean updateUser(UserEntity userEntity);
+
 }

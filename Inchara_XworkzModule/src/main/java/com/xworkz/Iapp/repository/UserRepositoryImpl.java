@@ -78,6 +78,27 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
+    public boolean updateUser(UserEntity userEntity) {
+
+        try {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+
+            entityManager.merge(userEntity);
+
+            entityManager.getTransaction().commit();
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+
+
+    @Override
     public void incrementCount(String email) {
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();

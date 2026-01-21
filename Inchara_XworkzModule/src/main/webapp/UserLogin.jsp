@@ -8,11 +8,11 @@
     <title>User Login</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-<!--    <script src="js/user_login.js"></script>-->
+
+
 
     <style>
         body {
-            background-image: url('images/bg.png');
             background-color: #f2f6ff;
             background-repeat: no-repeat;
             background-size: cover;
@@ -68,18 +68,19 @@
         <form action="login" method="post" onsubmit="return validateLoginAll()">
 
 
+
             <div class="mb-3">
                 <label for="email" class="form-label fw-bold">
                     Email <span class="required">*</span>
                 </label>
-                <input type="text"
-                       id="email"
-                       name="email"
+                <input type="text" id="email" name="email"
                        class="form-control"
-                       value="${userInfo.email}"
                        placeholder="Enter your email"
+                       value="${userInfo.email}"
                        oninput="validateLoginEmail(this)">
                 <small id="emailMsg" class="text-danger"></small>
+                <span style="color:red">${emailError}</span>
+
             </div>
 
             <div class="mb-3">
@@ -94,25 +95,38 @@
                        oninput="validateLoginPassword(this)">
 
                 <small id="passwordMsg" class="text-danger"></small>
+
             </div>
+
+
+
 
             <h6 class="text-danger d-block mb-2">${failureMsg}</h6>
 
+            <c:if test="${triesLeft!=null}">
+                <h6 class="text-danger">${passwordError} Tries left: ${triesLeft}</h6>
+            </c:if>
+
             <div class="text-center mt-3">
                 <button type="submit"
-                        class="btn btn-theme px-4 py-2 rounded-3">
-                    Login
+                        class="btn btn-theme px-4 py-2 rounded-3"
+                <c:if test="${enableOtp}">disabled</c:if>>
+                Login
                 </button>
             </div>
+            <br>
 
             <c:if test="${enableOtp}">
+                <small class="text-danger" >Too many failed attempts. Verify with OTP to continue.</small>
                 <a href="resetPasswordPage">Send Otp</a>
-                <small class="text-danger" hidden=""></small>
             </c:if>
 
         </form>
     </div>
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/user_login.js"></script>
 </body>
 </html>

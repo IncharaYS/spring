@@ -5,7 +5,7 @@ import com.xworkz.Iapp.dto.LoginDTO;
 import com.xworkz.Iapp.dto.UserDTO;
 import com.xworkz.Iapp.entity.UserEntity;
 import com.xworkz.Iapp.repository.UserRepository;
-import com.xworkz.Iapp.util.Encryption;
+import com.xworkz.Iapp.util.EncryptionUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
 //        userEntity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
-            userEntity.setPassword(Encryption.encrypt(userDTO.getPassword()));
+            userEntity.setPassword(EncryptionUtil.encrypt(userDTO.getPassword()));
 
             System.out.println(userEntity);
 
@@ -78,17 +78,21 @@ public class UserServiceImpl implements UserService {
 
         UserEntity entity = user.get();
 
-        if(entity.getInvalidPasswordCount()<3) {
+        if(entity.getInvalidPasswordCount()<2) {
 
-            String decryptedPassword = Encryption.decrypt(entity.getPassword());
+            String decryptedPassword = EncryptionUtil.decrypt(entity.getPassword());
             if (!decryptedPassword.equals(loginDTO.getPassword())) {
 
 //            if(bCryptPasswordEncoder.matches(userDTO.getPassword(), entity.getPassword())){
 
-                userRepository.incrementCount(loginDTO.getEmail());
+                entity.setInvalidPasswordCount(user.get().getInvalidPasswordCount()+1);
+                userRepository.updateUser(entity);
+
                 return IssueCode.INVALIDPWD;
             }
 
+            entity.setInvalidPasswordCount(0);
+            userRepository.updateUser(entity);
             return IssueCode.ALLOK;
         }
         else {
@@ -112,6 +116,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        Optional<UserEntity> user=userRepository.findByEmail(email);
+//        System.out.println("For email:"+email+":"+user.isPresent());
+        return user.isPresent();
+    }
+
+    @Override
+    public boolean phoneNoExists(String phoneNo) {
+        Optional<UserEntity> user=userRepository.findByPhoneNo(phoneNo);
+        return user.isPresent();
     }
 
 
