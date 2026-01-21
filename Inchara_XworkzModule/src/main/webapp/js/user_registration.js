@@ -26,7 +26,8 @@ async function validateEmail(input) {
         return;
     }
 
-    else{try {
+    else{
+    try {
         const response = await axios(
             "http://localhost:8082/Inchara_XworkzModule/checkEmailExists?email="+email);
 
@@ -51,10 +52,12 @@ async function validatePhoneNo(input) {
 
     if (phoneNo === "") {
         msg.textContent = "Phone number is required";
-    } else if (!pattern.test(phoneNo)) {
+    }
+     else if (!pattern.test(phoneNo)) {
         msg.textContent = "Phone must start with 6,7,8 or 9 and be 10 digits";
     }
-     else{  try {
+     else{
+       try {
               const response = await axios(
                   "http://localhost:8082/Inchara_XworkzModule/checkPhoneNoExists?phoneNo="+phoneNo);
 
