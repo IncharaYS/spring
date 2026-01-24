@@ -5,7 +5,7 @@
 <html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
-    <title>User Login</title>
+    <title>Forgot password</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -49,6 +49,12 @@
 
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto align-items-center">
+
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-medium py-0" href="loginPage">
+                        Login
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link text-white fw-medium py-0" href="registerPage">
                         Register
@@ -63,14 +69,11 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg rounded-4 p-4 bg-white w-100" style="max-width: 420px;">
 
-        <h4 class="text-center mb-4" style="color:#1e3a8a;">Login</h4>
+        <h4 class="text-center mb-4" style="color:#1e3a8a;">Reset Password</h4>
 
-        <small id="serverError" class="text-danger d-block mb-2">
-            ${serverError}
-        </small>
 
-        <form action="login" method="post" >
-<!--            onsubmit="return validateLoginAll()"-->
+
+        <form action="sendOpt" method="post" >
 
             <div class="mb-3">
                 <label for="email" class="form-label fw-bold">
@@ -78,58 +81,29 @@
                 </label>
                 <input type="text" id="email" name="email"
                        class="form-control"
+                       value="${email}"
                        placeholder="Enter your email"
-                       value="${userInfo.email}"
-                       onblur="validateLoginEmail()">
-                <small id="emailMsg" class="text-danger"></small>
-                <small id="invalidMsg" class="text-danger"></small>
-                <span style="color:red">${emailError}</span>
-
+                       onblur="validateEmail()">
             </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label fw-bold">
-                    Password <span class="required">*</span>
-                </label>
-                <input type="password"
-                       id="password"
-                       name="password"
-                       class="form-control"
-                       placeholder="Enter your password"
-                       oninput="validateLoginPassword(this)">
-
-                <small id="passwordMsg" class="text-danger"></small>
-
-            </div>
-
-            <small id="failureMsg" class="text-danger d-block mb-2">
-                ${failureMsg}
-            </small>
-
-            <small id="triesLeftMsg" class="text-danger d-block mb-2">
-                ${triesLeft}
-            </small>
+            <small id="emailMsg" class="text-danger"></small>
 
 
             <div class="d-grid pt-3">
-                <button type="submit" id="loginButton" disabled
+                <button type="submit" id="submitBtn" disabled
                         class="btn btn-theme px-3 py-2 rounded-3 mx-auto w-50">
-                    Login
+                    Submit
                 </button>
             </div>
 
 
 
+
         </form>
-        <br>
-        <a  href="forgotPasswordPage">Forgot password?</a>
-
-
     </div>
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/user_login.js"></script>
+<script src="${pageContext.request.contextPath}/js/forgot_password.js"></script>
 </body>
 </html>

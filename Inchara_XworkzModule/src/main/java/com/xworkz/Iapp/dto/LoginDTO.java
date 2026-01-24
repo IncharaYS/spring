@@ -13,8 +13,7 @@ import javax.validation.constraints.Size;
 public class LoginDTO {
 
     @NotBlank(message = "Please enter email")
-    @Size(min =1,max = 50,message = "email should be between 6-20 characters")
-//    @Email(message = "Enter valid email")
+   @Email(message = "Enter valid email")
     private String email;
 
     @NotBlank(message = "Please enter password")

@@ -9,8 +9,9 @@ public enum IssueCode {
     INVALIDPWD("Entered password is invalid"),
     PWDTRIESLIMITREACHED("Entered incorrect password more than 3 times login using otp"),
     PASSWORDMISMATCH("Entered confirm password does not match password"),
-    DBERROR("Failed to save"),
-    PHONENOEXISTS("Entered phone number already exists");
+    DBERROR("Server error, try again later(It's not you it's us)"),
+    PHONENOEXISTS("Entered phone number already exists"),
+    OTPNOTSENT("Failed to send otp");
 
     private String message;
 

@@ -10,8 +10,6 @@ public interface UserRepository {
 
     Optional<UserEntity> findByEmail(String email);
 
-    void incrementCount(String email);
-
     Optional<UserEntity> findByPhoneNo(String phoneNo);
 
     boolean updateUser(UserEntity userEntity);

@@ -1,42 +1,63 @@
 console.log("user_login.js loaded");
+const loginBtn = document.getElementById("loginButton");
 
-async function validateLoginEmail(input) {
-    const email = input.value.trim();
+let emailValid = false;
+let passwordValid = false;
+let blockedByAttempts = false;
+
+validateLoginEmail();
+
+
+async function validateLoginEmail() {
+    const email = document.getElementById("email").value.trim();
     const msg = document.getElementById("emailMsg");
+
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (email === "") {
-        msg.textContent = "Email is required";
-        return;
-    }
+    emailValid = false;
+    blockedByAttempts = false;
 
-    else  if (!pattern.test(email)) {
-        console.log("inside else if");
-        msg.textContent = "Entered email is not valid";
-        return;
-    }
-    else{
-    console.log("inside else");
-    try {
 
-        const response = await axios(
-            "http://localhost:8082/Inchara_XworkzModule/checkEmailExists?email="+email);
-
-        console.log(response);
-        if (response.data === false) {
-            msg.textContent = "Your email is not registered";
-                    return;
-        } else {
+     if (email === "") {
             msg.textContent = "";
-                    return;
+            updateLoginButton();
+            return;
+        }
+
+    if (!pattern.test(email)) {
+        msg.textContent = "Entered email is not valid";
+        updateLoginButton();
+        return;
+    }
+
+    msg.textContent = "";
+
+    try {
+        const response = await axios(
+            "http://localhost:8082/Inchara_XworkzModule/checkEmailAndTries?email=" + email
+        );
+
+        const data = response.data;
+
+        if (!data.exists) {
+            msg.textContent = "Your email is not registered";
+            updateLoginButton();
+            return;
+        }
+
+        if (data.attempts >= 3) {
+            blockedByAttempts = true;
+            msg.textContent = "Too many failed attempts. Reset password.";
+        } else {
+            emailValid = true;
         }
 
     } catch (e) {
         console.error(e);
         msg.textContent = "Server error";
-                return;
     }
-    }
+
+    updateLoginButton();
 }
 
 
@@ -44,32 +65,25 @@ function validateLoginPassword(input) {
     const msg = document.getElementById("passwordMsg");
     const value = input.value.trim();
 
-    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const pattern =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    if (value === "") {
-        msg.textContent = "Password is required";
-    } else if (!pattern.test(value)) {
+    passwordValid = false;
+
+    if (!pattern.test(value)) {
         msg.textContent =
             "Password must be at least 8 characters and include uppercase, lowercase, number & special character";
     } else {
         msg.textContent = "";
+        passwordValid = true;
     }
+
+    updateLoginButton();
+}
+
+function updateLoginButton() {
+    loginBtn.disabled = !(emailValid && passwordValid && !blockedByAttempts);
 }
 
 
 
-
-function validateLoginAll() {
-
-    validateLoginEmail(document.getElementById("email"));
-    validateLoginPassword(document.getElementById("password"));
-
-    const errors = document.querySelectorAll("small.text-danger");
-
-    for (let e of errors) {
-        if (e.textContent.trim() !== "") {
-            return false;
-        }
-    }
-    return true;
-}

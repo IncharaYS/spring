@@ -1,5 +1,6 @@
 package com.xworkz.Iapp.restcontroller;
 
+import com.xworkz.Iapp.dto.ValidationResponseDTO;
 import com.xworkz.Iapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,12 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/checkEmailExists")
-    public ResponseEntity<String> checkEmail(@RequestParam(name = "email") String email) {
-        Boolean exists = userService.emailExists(email);
-        return ResponseEntity.ok(exists.toString());
+
+    @GetMapping("/checkEmailAndTries")
+    public ValidationResponseDTO checkEmail(@RequestParam(name = "email") String email) {
+        ValidationResponseDTO validationResponseDTO=userService.emailExists(email);
+        System.out.println(validationResponseDTO);
+        return validationResponseDTO;
     }
 
 
@@ -25,4 +28,8 @@ public class UserRestController {
         Boolean exists = userService.phoneNoExists(phoneNo);
         return ResponseEntity.ok(exists.toString());
     }
+
+
+
+
 }

@@ -49,6 +49,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             UserEntity userEntity = (UserEntity) query.getSingleResult();
 
+            entityManager.close();
             return Optional.of(userEntity);
         }
 
@@ -67,6 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
             query.setParameter("phoneNo", phoneNo);
 
             UserEntity userEntity = (UserEntity) query.getSingleResult();
+            entityManager.close();
 
             return Optional.of(userEntity);
         }
@@ -87,6 +89,7 @@ public class UserRepositoryImpl implements UserRepository {
             entityManager.merge(userEntity);
 
             entityManager.getTransaction().commit();
+            entityManager.close();
             return true;
 
         } catch (Exception e) {
@@ -96,31 +99,5 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
-
-
-    @Override
-    public void incrementCount(String email) {
-
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-        try {
-            entityManager.getTransaction().begin();
-
-            Query query = entityManager.createNamedQuery("incrementCount");
-            query.setParameter("email", email);
-            int rowsUpdated= query.executeUpdate();
-
-            entityManager.getTransaction().commit();
-
-            if(rowsUpdated>0){
-                System.out.println("Increment successful");
-            }
-            else System.out.println("Increment failed");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 }
 

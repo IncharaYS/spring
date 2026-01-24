@@ -3,14 +3,14 @@ package com.xworkz.Iapp.controller;
 import com.xworkz.Iapp.constants.IssueCode;
 import com.xworkz.Iapp.dto.LoginDTO;
 import com.xworkz.Iapp.dto.UserDTO;
+import com.xworkz.Iapp.service.EmailService;
 import com.xworkz.Iapp.service.UserService;
+import com.xworkz.Iapp.util.OtpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -22,6 +22,8 @@ public class UserController{
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("loginPage")
     public String loginPage(){
@@ -38,10 +40,6 @@ public class UserController{
         return "HomePage";
     }
 
-    @GetMapping("resetPasswordPage")
-    public String resetPasswordPage(){
-        return "ResetPassword";
-    }
 
 
     @PostMapping("register")
@@ -83,6 +81,7 @@ public class UserController{
 
                 case ALLOK:
                     model.addObject("successMsg", "Registration successful. Please login.");
+                    model.addObject("dto", userDTO);
                     model.setViewName("UserLogin");
                     return model;
 
@@ -124,13 +123,19 @@ public class UserController{
 
 
                 case INVALIDPWD:
+
                     Optional<UserDTO> user1 =userService.findByEmail(loginDTO.getEmail());
                     int count=user1.get().getInvalidPasswordCount();
+                    if(count<3) model.addObject("triesLeft","Tries left:"+(3-count));
 
-                    if(count<3) model.addObject("triesLeft",3-count);
                     model.addObject("failureMsg",IssueCode.INVALIDPWD.getMessage());
                     model.addObject("userInfo", loginDTO);
 
+                    model.setViewName("UserLogin");
+                    return model;
+
+                case DBERROR:
+                    model.addObject("serverError",IssueCode.DBERROR.getMessage());
                     model.setViewName("UserLogin");
                     return model;
 
@@ -149,6 +154,5 @@ public class UserController{
                     return model;
             }
     }
-
 }
 

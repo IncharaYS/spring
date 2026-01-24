@@ -29,9 +29,11 @@ async function validateEmail(input) {
     else{
     try {
         const response = await axios(
-            "http://localhost:8082/Inchara_XworkzModule/checkEmailExists?email="+email);
+            "http://localhost:8082/Inchara_XworkzModule/checkEmailAndTries?email="+email);
 
-        if (response.data === true) {
+        const data = response.data;
+
+        if (data.exists) {
             msg.textContent = "Your email is already registered";
         } else {
             msg.textContent = "";

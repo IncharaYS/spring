@@ -3,6 +3,7 @@ package com.xworkz.Iapp.service;
 import com.xworkz.Iapp.constants.IssueCode;
 import com.xworkz.Iapp.dto.LoginDTO;
 import com.xworkz.Iapp.dto.UserDTO;
+import com.xworkz.Iapp.dto.ValidationResponseDTO;
 import com.xworkz.Iapp.entity.UserEntity;
 import com.xworkz.Iapp.repository.UserRepository;
 import com.xworkz.Iapp.util.EncryptionUtil;
@@ -51,8 +52,7 @@ public class UserServiceImpl implements UserService {
 
             userEntity.setPassword(EncryptionUtil.encrypt(userDTO.getPassword()));
 
-            System.out.println(userEntity);
-
+            userEntity.setCreatedBy(userDTO.getUserName());
             boolean isSaved = userRepository.save(userEntity);
 
             if (isSaved) {
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity entity = user.get();
 
-        if(entity.getInvalidPasswordCount()<2) {
+        if(entity.getInvalidPasswordCount()<3) {
 
             String decryptedPassword = EncryptionUtil.decrypt(entity.getPassword());
             if (!decryptedPassword.equals(loginDTO.getPassword())) {
@@ -86,13 +86,15 @@ public class UserServiceImpl implements UserService {
 //            if(bCryptPasswordEncoder.matches(userDTO.getPassword(), entity.getPassword())){
 
                 entity.setInvalidPasswordCount(user.get().getInvalidPasswordCount()+1);
-                userRepository.updateUser(entity);
+                boolean isUpdated=userRepository.updateUser(entity);
+                if(!isUpdated) return DBERROR;
 
                 return IssueCode.INVALIDPWD;
             }
 
             entity.setInvalidPasswordCount(0);
-            userRepository.updateUser(entity);
+            boolean isUpdated=userRepository.updateUser(entity);
+            if(!isUpdated) return DBERROR;
             return IssueCode.ALLOK;
         }
         else {
@@ -119,16 +121,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean emailExists(String email) {
+    public ValidationResponseDTO emailExists(String email) {
         Optional<UserEntity> user=userRepository.findByEmail(email);
-//        System.out.println("For email:"+email+":"+user.isPresent());
-        return user.isPresent();
+
+        System.out.println("For email:"+email+":"+user.isPresent());
+
+        ValidationResponseDTO response=new ValidationResponseDTO();
+
+        System.out.println(user);
+
+
+        if(user.isPresent()){
+            response.setAttempts(user.get().getInvalidPasswordCount());
+            response.setExists(true);
+        }
+
+        System.out.println(response);
+        return response;
     }
 
     @Override
     public boolean phoneNoExists(String phoneNo) {
         Optional<UserEntity> user=userRepository.findByPhoneNo(phoneNo);
         return user.isPresent();
+    }
+
+    @Override
+    public boolean canLoginWithPwd(String email) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        int count=user.get().getInvalidPasswordCount();
+        return (count<3);
     }
 
 

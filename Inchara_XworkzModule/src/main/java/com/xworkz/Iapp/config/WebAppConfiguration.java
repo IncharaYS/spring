@@ -3,6 +3,9 @@ package com.xworkz.Iapp.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -32,4 +35,11 @@ public class WebAppConfiguration {
 //    BCryptPasswordEncoder bCryptPasswordEncoder(){
 //        return new BCryptPasswordEncoder();
 //    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer getProperties() {
+        PropertySourcesPlaceholderConfigurer properties = new PropertySourcesPlaceholderConfigurer();
+        properties.setLocation(new ClassPathResource("application.properties"));
+        return properties;
+    }
 }

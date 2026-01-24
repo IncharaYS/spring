@@ -23,7 +23,6 @@ public class UserDTO implements Serializable {
     private String userName;
 
     @NotBlank(message = "Please enter email")
-    @Size(min = 6,max = 20,message = "email should be between 6-20 characters")
     @Email(message = "Enter valid email")
     private String email;
 
