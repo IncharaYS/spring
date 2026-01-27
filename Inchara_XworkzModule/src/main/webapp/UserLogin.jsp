@@ -70,7 +70,6 @@
         </small>
 
         <form action="login" method="post" >
-<!--            onsubmit="return validateLoginAll()"-->
 
             <div class="mb-3">
                 <label for="email" class="form-label fw-bold">

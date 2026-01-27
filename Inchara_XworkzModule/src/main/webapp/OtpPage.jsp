@@ -46,7 +46,6 @@
             OTP sent to <strong>${email}</strong>
         </p>
 
-        <!-- VERIFY OTP FORM -->
         <form action="verifyOtp" method="post">
             <input type="hidden" name="email" value="${email}" />
 
@@ -64,14 +63,12 @@
             </div>
         </form>
 
-        <!-- TIMER -->
         <div class="text-center mt-3">
             <span class="text-muted">
                 Resend OTP in <span id="timer">60</span> seconds
             </span>
         </div>
 
-        <!-- RESEND OTP FORM (HIDDEN INITIALLY) -->
         <form action="resendOtp" method="post"
               id="resendForm" style="display:none;"
               class="text-center mt-3">

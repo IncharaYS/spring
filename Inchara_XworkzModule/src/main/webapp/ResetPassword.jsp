@@ -71,7 +71,6 @@
             Reset Password
         </h4>
 
-        <!-- SERVER SIDE MESSAGE -->
         <c:if test="${not empty failureMsg}">
             <div class="alert alert-danger text-center">
                 ${failureMsg}
@@ -86,10 +85,8 @@
 
         <form action="resetPassword" method="post">
 
-            <!-- HIDDEN EMAIL -->
             <input type="hidden" name="email" value="${email}"/>
 
-            <!-- EMAIL DISPLAY -->
             <div class="mb-3">
                 <label class="form-label fw-bold">
                     Email
@@ -100,7 +97,6 @@
                        readonly>
             </div>
 
-            <!-- PASSWORD -->
             <div class="mb-3">
                 <label class="form-label fw-bold">
                     New Password <span class="required">*</span>
@@ -112,7 +108,6 @@
                        onkeyup="checkPasswordMatch()">
             </div>
 
-            <!-- CONFIRM PASSWORD -->
             <div class="mb-3">
                 <label class="form-label fw-bold">
                     Confirm Password <span class="required">*</span>
@@ -126,7 +121,6 @@
                 <small id="passwordError" class="text-danger"></small>
             </div>
 
-            <!-- SUBMIT -->
             <div class="d-grid pt-2">
                 <button type="submit"
                         id="resetBtn"
@@ -140,7 +134,6 @@
     </div>
 </div>
 
-<!-- PASSWORD MATCH SCRIPT -->
 <script>
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirmPassword");

@@ -157,7 +157,6 @@ public class UserServiceImpl implements UserService {
 
         UserEntity entity = user.get();
 
-        Long currentTime = System.currentTimeMillis();
         Long otpTime = entity.getOtpGeneratedTime();
 
         if (otpTime == null || System.currentTimeMillis() - entity.getOtpGeneratedTime() > 60000) {

@@ -47,16 +47,15 @@ public class UserController{
 
     @GetMapping("profilePage")
     public ModelAndView profilePage(HttpSession session, ModelAndView model) {
-
-        UserDTO user = (UserDTO) session.getAttribute("userInfo");
-
-        if (user == null) {
-            model.setViewName("LoginPage");
-            return model;
-        }
-
-        model.addObject("userInfo", user);
+        model.addObject("userInfo", session.getAttribute("userInfo"));
         model.setViewName("ProfilePage");
+        return model;
+    }
+
+    @GetMapping("updateProfilePage")
+    public ModelAndView updateProfilePage(HttpSession session, ModelAndView model) {
+        model.addObject("userInfo", session.getAttribute("userInfo"));
+        model.setViewName("UpdateProfile");
         return model;
     }
 
@@ -232,7 +231,7 @@ public class UserController{
         }
 
         session.invalidate();
-        return "redirect:/loginPage";
+        return "UserLogin";
     }
 
 
