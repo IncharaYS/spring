@@ -5,25 +5,15 @@
 <html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
-    <title>OTP page</title>
+    <title>OTP Verification</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
 
     <style>
         body {
             background-color: #f2f6ff;
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            backdrop-filter: blur(3px);
             font-family: 'Poppins', sans-serif;
         }
-
-        .form-label { color: #1e3a8a; }
-        .required { color: red; }
-
         .btn-theme {
             background-color: #2563eb;
             color: white;
@@ -39,93 +29,81 @@
 <nav class="navbar navbar-expand-lg px-3 shadow-sm"
      style="background-color: #0b3c5d; min-height: 60px;">
     <div class="container-fluid">
-
-        <a class="navbar-brand d-flex align-items-center gap-2 text-white fw-semibold p-0">
-            <img src="images/img_1.png"
-                 alt="Logo"
-                 width="120"
-                 height="45">
+        <a class="navbar-brand text-white fw-semibold">
+            <img src="images/img_1.png" width="120" height="45">
         </a>
-
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link text-white fw-medium py-0" href="registerPage">
-                        Register
-                    </a>
-                </li>
-            </ul>
-        </div>
-
     </div>
 </nav>
 
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg rounded-4 p-4 bg-white w-100" style="max-width: 420px;">
 
-        <h4 class="text-center mb-4" style="color:#1e3a8a;"></h4>
+        <h4 class="text-center mb-3" style="color:#1e3a8a;">
+            OTP Verification
+        </h4>
 
+        <p class="text-center text-muted">
+            OTP sent to <strong>${email}</strong>
+        </p>
 
-
-        <form action="login" method="post" >
-
-            <div class="mb-3">
-                <label for="email" class="form-label fw-bold">
-                    Email <span class="required">*</span>
-                </label>
-                <input type="text" id="email" name="email"
-                       class="form-control"
-                       placeholder="Enter your email"
-                       value="${email}"
-                       disabled
-                >
-
-
-            </div>
+        <!-- VERIFY OTP FORM -->
+        <form action="verifyOtp" method="post">
+            <input type="hidden" name="email" value="${email}" />
 
             <div class="mb-3">
-                <label for="otp" class="form-label fw-bold">
-                    Otp <span class="required">*</span>
-                </label>
-                <input type="number"
-                       id="otp"
-                       name="otp"
-                       class="form-control"
-                       placeholder="Enter OTP"
-                       oninput="validateOtp(this)">
-
-                <small id="otpMsg" class="text-danger"></small>
-
+                <label class="form-label fw-bold">Enter OTP</label>
+                <input type="text" name="otp" class="form-control"
+                       placeholder="Enter 6-digit OTP">
+                <small class="text-danger">${failureMsg}</small>
             </div>
 
-<!--            <small id="failureMsg" class="text-danger d-block mb-2">-->
-<!--                ${failureMsg}-->
-<!--            </small>-->
-
-<!--            <small id="triesLeftMsg" class="text-danger d-block mb-2">-->
-<!--                ${triesLeft}-->
-<!--            </small>-->
-
-<!--            <a id="forgotPassword" href="forgotPassword.jsp" style="display:none;">-->
-<!--                Forgot Password?-->
-<!--            </a>-->
-
-
-            <div class="d-grid pt-3">
-                <button type="submit" id="loginButton" disabled
-                        class="btn btn-theme px-3 py-2 rounded-3 mx-auto w-50">
-                    Submit
+            <div class="d-grid mb-2">
+                <button type="submit" class="btn btn-theme">
+                    Verify OTP
                 </button>
             </div>
-
-
         </form>
-        <br>
+
+        <!-- TIMER -->
+        <div class="text-center mt-3">
+            <span class="text-muted">
+                Resend OTP in <span id="timer">60</span> seconds
+            </span>
+        </div>
+
+        <!-- RESEND OTP FORM (HIDDEN INITIALLY) -->
+        <form action="resendOtp" method="post"
+              id="resendForm" style="display:none;"
+              class="text-center mt-3">
+
+            <input type="hidden" name="email" value="${email}" />
+
+            <button type="submit" class="btn btn-outline-primary">
+                Resend OTP
+            </button>
+        </form>
+
     </div>
 </div>
 
+<script>
+    let timeLeft = ${remainingTime != null ? remainingTime : 60};
+    const timerEl = document.getElementById("timer");
+    const resendForm = document.getElementById("resendForm");
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/user_login.js"></script>
+    timerEl.innerText = timeLeft;
+
+    const interval = setInterval(() => {
+        timeLeft--;
+        timerEl.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            timerEl.innerText = "0";
+            resendForm.style.display = "block";
+        }
+    }, 1000);
+</script>
+
 </body>
 </html>

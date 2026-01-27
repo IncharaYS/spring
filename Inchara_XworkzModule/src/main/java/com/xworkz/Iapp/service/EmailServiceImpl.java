@@ -44,14 +44,18 @@ public class EmailServiceImpl implements EmailService{
             message.setSubject("OTP Verification");
             message.setText(
                     "Your OTP for verification is: " + otp +
-                            "\n\nThis OTP is valid for 5 minutes.\n\n" +
+                            "\n\nThis OTP is valid for 1 minute.\n\n" +
                             "Do not share this OTP with anyone."
             );
+
+
 
             mailSender.send(message);
 
             UserEntity userEntity=user.get();
             userEntity.setOtp(EncryptionUtil.encrypt(otp));
+
+            userEntity.setOtpGeneratedTime(System.currentTimeMillis());
 
             boolean isUpdated=userRepository.updateUser(userEntity);
             if(!isUpdated) return DBERROR;

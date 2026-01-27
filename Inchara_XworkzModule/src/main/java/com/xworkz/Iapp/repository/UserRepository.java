@@ -14,4 +14,7 @@ public interface UserRepository {
 
     boolean updateUser(UserEntity userEntity);
 
+    boolean deleteByEmail(String email);
+
+
 }

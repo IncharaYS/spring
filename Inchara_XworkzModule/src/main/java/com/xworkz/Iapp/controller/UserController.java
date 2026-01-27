@@ -1,5 +1,6 @@
 package com.xworkz.Iapp.controller;
 
+import com.mysql.cj.QueryAttributesBindings;
 import com.xworkz.Iapp.constants.IssueCode;
 import com.xworkz.Iapp.dto.LoginDTO;
 import com.xworkz.Iapp.dto.UserDTO;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -24,6 +26,8 @@ public class UserController{
     private UserService userService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private HttpSession session;
 
     @GetMapping("loginPage")
     public String loginPage(){
@@ -39,6 +43,23 @@ public class UserController{
     public String homePage(){
         return "HomePage";
     }
+
+
+    @GetMapping("profilePage")
+    public ModelAndView profilePage(HttpSession session, ModelAndView model) {
+
+        UserDTO user = (UserDTO) session.getAttribute("userInfo");
+
+        if (user == null) {
+            model.setViewName("LoginPage");
+            return model;
+        }
+
+        model.addObject("userInfo", user);
+        model.setViewName("ProfilePage");
+        return model;
+    }
+
 
 
 
@@ -142,10 +163,12 @@ public class UserController{
                 case ALLOK:
                     Optional<UserDTO> user =userService.findByEmail(loginDTO.getEmail());
 
-                    if (user.isPresent()) {
-                        model.addObject("userName", user.get().getUserName());
-                        model.addObject("userInfo", user.get());
-                    }
+
+                    session.setAttribute("userName", user.get().getUserName());
+                    session.setAttribute("userInfo", user.get());
+
+                    model.addObject("userName", user.get().getUserName());
+                    model.addObject("userInfo", user.get());
                     model.setViewName("HomePage");
                     return model;
 
@@ -153,6 +176,66 @@ public class UserController{
                     model.setViewName("HomePage");
                     return model;
             }
+
+
     }
+
+
+    @GetMapping("logout")
+    public ModelAndView logout(HttpSession session,ModelAndView modelAndView) {
+
+        session.invalidate();
+        modelAndView.setViewName("UserLogin");
+        return modelAndView;
+    }
+
+
+
+    @PostMapping("updateUser")
+    public ModelAndView updateUser(UserDTO userDTO, HttpSession session, ModelAndView model) {
+
+        IssueCode issueCode = userService.updateUser(userDTO);
+
+        switch (issueCode) {
+
+            case ALLOK:
+                session.setAttribute("userInfo", userDTO);
+                model.addObject("successMsg", "Profile updated successfully");
+                break;
+
+            case EMAILNOTREGISTERED:
+                model.addObject("failureMsg", "User not found");
+                break;
+
+            case DBERROR:
+                model.addObject("failureMsg", "Unable to update profile");
+                break;
+
+            default:
+                model.addObject("failureMsg", "Something went wrong");
+        }
+
+        model.addObject("userInfo", session.getAttribute("userInfo"));
+        model.setViewName("ProfilePage");
+        return model;
+    }
+
+
+
+    @PostMapping("deleteUser")
+    public String deleteUser(HttpSession session) {
+
+        UserDTO user = (UserDTO) session.getAttribute("userInfo");
+
+        if (user != null) {
+            userService.deleteUser(user.getEmail());
+        }
+
+        session.invalidate();
+        return "redirect:/loginPage";
+    }
+
+
+
 }
 

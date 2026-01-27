@@ -99,5 +99,30 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+
+    @Override
+    public boolean deleteByEmail(String email) {
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+
+            Query query = entityManager.createNamedQuery("deleteByEmail");
+
+            int rowsAffected =query.setParameter("email", email).executeUpdate();
+
+            entityManager.getTransaction().commit();
+            entityManager.close();
+
+            return rowsAffected > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.close();
+            return false;
+        }
+    }
+
 }
 

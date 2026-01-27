@@ -13,7 +13,8 @@ import javax.persistence.*;
 @Table(name = "users")
 @NamedQueries({
         @NamedQuery(name="findByPhoneNo", query="select u from UserEntity u where u.phoneNo=:phoneNo"),
-        @NamedQuery(name="findByEmail", query="select u from UserEntity u where u.email=:email")
+        @NamedQuery(name="findByEmail", query="select u from UserEntity u where u.email=:email"),
+        @NamedQuery(name = "deleteByEmail",query = "delete from UserEntity u where u.email=:email")
 })
 
 public class UserEntity extends BaseEntity{
@@ -48,5 +49,8 @@ public class UserEntity extends BaseEntity{
 
     @Column(name = "otp")
     private String otp;
+
+    @Column(name = "otp_generated_time")
+    private Long otpGeneratedTime;
 
 }

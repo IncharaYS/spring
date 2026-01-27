@@ -147,14 +147,91 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean canLoginWithPwd(String email) {
+    public IssueCode verifyOtp(String email, String otp) {
+
         Optional<UserEntity> user = userRepository.findByEmail(email);
-        int count=user.get().getInvalidPasswordCount();
-        return (count<3);
+
+        if (!user.isPresent()) {
+            return IssueCode.EMAILNOTREGISTERED;
+        }
+
+        UserEntity entity = user.get();
+
+        Long currentTime = System.currentTimeMillis();
+        Long otpTime = entity.getOtpGeneratedTime();
+
+        if (otpTime == null || System.currentTimeMillis() - entity.getOtpGeneratedTime() > 60000) {
+            return IssueCode.OTPEXPIRED;
+        }
+
+
+        if (!otp.equals(EncryptionUtil.decrypt(entity.getOtp()))) {
+            return IssueCode.INVALIDOTP;
+        }
+
+        return IssueCode.ALLOK;
     }
+
+    @Override
+    public IssueCode resetPassword(String email, String password) {
+
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+
+        if (!user.isPresent()) {
+            return IssueCode.EMAILNOTREGISTERED;
+        }
+
+        UserEntity entity = user.get();
+        entity.setPassword(EncryptionUtil.encrypt(password));
+        entity.setOtp(null);
+        entity.setOtpGeneratedTime(null);
+
+        boolean updated = userRepository.updateUser(entity);
+
+        return updated ? IssueCode.ALLOK : IssueCode.DBERROR;
+    }
+
 
 
     private boolean checkConfirmPassword(String password,String cPassword){
         return password.equals(cPassword);
     }
-}
+
+
+
+        @Override
+        public IssueCode updateUser(UserDTO userDTO) {
+
+            Optional<UserEntity> optionalEntity = userRepository.findByEmail(userDTO.getEmail());
+
+            if (!optionalEntity.isPresent()) {
+                return IssueCode.EMAILNOTREGISTERED;
+            }
+
+            UserEntity entity = optionalEntity.get();
+
+            entity.setUserName(userDTO.getUserName());
+            entity.setAge(userDTO.getAge());
+            entity.setGender(userDTO.getGender());
+            entity.setAddress(userDTO.getAddress());
+
+            boolean updated = userRepository.updateUser(entity);
+            return updated ? IssueCode.ALLOK : IssueCode.DBERROR;
+        }
+
+        @Override
+        public IssueCode deleteUser(String email) {
+
+            Optional<UserEntity> optionalEntity = userRepository.findByEmail(email);
+
+            if (!optionalEntity.isPresent()) {
+                return IssueCode.EMAILNOTREGISTERED;
+            }
+
+            boolean deleted = userRepository.deleteByEmail(email);
+
+            return deleted ? IssueCode.ALLOK : IssueCode.DBERROR;
+        }
+    }
+
+

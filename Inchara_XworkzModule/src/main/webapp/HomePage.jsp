@@ -36,7 +36,6 @@
 
 <body>
 
-
 <nav class="navbar navbar-expand-lg px-3 shadow-sm"
      style="background-color: #0b3c5d; min-height: 60px;">
     <div class="container-fluid">
@@ -50,14 +49,25 @@
 
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto align-items-center gap-3">
+
                 <li class="nav-item">
                     <span class="nav-link fw-bold">
                         Welcome, ${userName}
                     </span>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="loginPage">Login</a>
+                    <a class="nav-link" href="profilePage">
+                        Profile
+                    </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="logout">
+                        Logout
+                    </a>
+                </li>
+
             </ul>
         </div>
 
@@ -68,31 +78,45 @@
      style="min-height: calc(100vh - 60px); padding-top: 40px; padding-bottom: 40px;">
 
     <div class="card shadow-lg rounded-4 p-4 bg-white w-100"
-         style="max-width: 520px;">
+         style="max-width: 720px;">
 
-        <h5 class="text-center text-success mb-3">${successMsg}</h5>
-        <h5 class="text-center text-danger mb-3">${failureMsg}</h5>
-
-
-        <h4 class="card-title text-center mb-4">
-            User Information:
+        <h4 class="card-title text-center mb-3">
+            Welcome to the Dashboard
         </h4>
 
-        <hr>
 
 
-        <c:if test="${userInfo!=null}">
-            <div class="px-3">
-                <p><strong>Name:</strong> ${userInfo.userName}</p>
-                <p><strong>Email:</strong> ${userInfo.email}</p>
-                <p><strong>Phone:</strong> ${userInfo.phoneNo}</p>
-                <p><strong>Age:</strong> ${userInfo.age}</p>
-                <p><strong>Gender:</strong> ${userInfo.gender}</p>
-                <p><strong>Address:</strong> ${userInfo.address}</p>
+        <div class="row g-4">
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">View Profile</h5>
+                        <p class="card-text">
+                            Check and manage your personal information.
+                        </p>
+                        <a href="profilePage" class="btn btn-primary">
+                            Go to Profile
+                        </a>
+                    </div>
+                </div>
             </div>
-        </c:if>
 
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Reset Password</h5>
+                        <p class="card-text">
+                            Change your account password securely.
+                        </p>
+                        <a href="forgotPasswordPage" class="btn btn-primary">
+                            Reset Password
+                        </a>
+                    </div>
+                </div>
+            </div>
 
+        </div>
 
     </div>
 </div>

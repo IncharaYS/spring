@@ -25,7 +25,19 @@ public interface UserService {
 
     boolean phoneNoExists(String phoneNo);
 
-    boolean canLoginWithPwd(String email);
+
+    IssueCode verifyOtp(String email, String otp);
+
+    IssueCode resetPassword(String email, String password);
+
+
+    IssueCode updateUser(UserDTO userDTO);
+
+    IssueCode deleteUser(String email);
+
+
+
+
 
 
 }

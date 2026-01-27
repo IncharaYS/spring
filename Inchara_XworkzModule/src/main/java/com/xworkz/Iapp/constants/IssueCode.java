@@ -11,7 +11,9 @@ public enum IssueCode {
     PASSWORDMISMATCH("Entered confirm password does not match password"),
     DBERROR("Server error, try again later(It's not you it's us)"),
     PHONENOEXISTS("Entered phone number already exists"),
-    OTPNOTSENT("Failed to send otp");
+    OTPNOTSENT("Failed to send otp"),
+    OTPEXPIRED("Time limit for otp reached"),
+    INVALIDOTP("Entered OTP is incorrect");
 
     private String message;
 

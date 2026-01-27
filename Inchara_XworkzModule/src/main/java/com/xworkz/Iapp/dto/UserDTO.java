@@ -50,5 +50,9 @@ public class UserDTO implements Serializable {
 
     private  int invalidPasswordCount;
 
+    private String otp;
+
+    private Long otpGeneratedTime;
+
 
 }
