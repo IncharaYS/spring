@@ -103,10 +103,10 @@
     <hr>
 
     <div class="list-group list-group-flush">
-        <a href="addEventPage" class="list-group-item list-group-item-action">
-             Add Team
+        <a href="addTeamPage" class="list-group-item list-group-item-action">
+            Add Team
         </a>
-        <a href="viewEventsPage" class="list-group-item list-group-item-action">
+        <a href="viewTeamsPage" class="list-group-item list-group-item-action">
             View Teams
         </a>
     </div>

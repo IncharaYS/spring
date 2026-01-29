@@ -181,6 +181,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserEntity entity = user.get();
+
         entity.setPassword(EncryptionUtil.encrypt(password));
         entity.setOtp(null);
         entity.setOtpGeneratedTime(null);
@@ -209,10 +210,7 @@ public class UserServiceImpl implements UserService {
 
             UserEntity entity = optionalEntity.get();
 
-            entity.setUserName(userDTO.getUserName());
-            entity.setAge(userDTO.getAge());
-            entity.setGender(userDTO.getGender());
-            entity.setAddress(userDTO.getAddress());
+            BeanUtils.copyProperties(userDTO,entity);
 
             boolean updated = userRepository.updateUser(entity);
             return updated ? IssueCode.ALLOK : IssueCode.DBERROR;

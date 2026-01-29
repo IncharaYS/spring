@@ -13,7 +13,10 @@ public enum IssueCode {
     PHONENOEXISTS("Entered phone number already exists"),
     OTPNOTSENT("Failed to send otp"),
     OTPEXPIRED("Time limit for otp reached"),
-    INVALIDOTP("Entered OTP is incorrect");
+    INVALIDOTP("Entered OTP is incorrect"),
+    INVALIDINPUT("Invalid input");
+
+
 
     private String message;
 
