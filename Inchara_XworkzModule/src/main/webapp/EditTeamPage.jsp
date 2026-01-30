@@ -50,12 +50,10 @@
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg shadow-sm"
      style="background-color: #0b3c5d; min-height: 60px;">
     <div class="container-fluid d-flex align-items-center">
 
-        <!-- DASHBOARD BUTTON -->
         <button class="btn text-white p-0 me-3"
                 type="button"
                 onclick="toggleSidebar()"
@@ -63,12 +61,10 @@
             <i class="bi bi-list"></i>
         </button>
 
-        <!-- LOGO -->
         <a class="navbar-brand d-flex align-items-center text-white fw-semibold p-0">
             <img src="images/img_1.png" width="120" height="45">
         </a>
 
-        <!-- RIGHT NAV -->
         <ul class="navbar-nav ms-auto align-items-center gap-3">
             <li class="nav-item">
                 <a class="nav-link" href="homePage">Home</a>
@@ -85,7 +81,6 @@
     </div>
 </nav>
 
-<!-- SIDEBAR -->
 <div id="sidebar" class="sidebar">
 
     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -107,7 +102,6 @@
     </div>
 </div>
 
-<!-- CONTENT -->
 <div class="container d-flex justify-content-center align-items-center"
      style="min-height: calc(100vh - 60px); padding:40px 0;">
 
@@ -116,7 +110,6 @@
 
         <h4 class="text-center mb-4 card-title">Edit Team</h4>
 
-        <!-- UPDATE FORM -->
         <form action="updateTeam" method="post"
               onsubmit="return validateAllTeam()">
 
@@ -175,7 +168,6 @@
 
         </form>
 
-        <!-- DELETE FORM -->
         <form action="deleteTeam" method="get"
               onsubmit="return confirm('Are you sure you want to permanently delete this team?');">
 

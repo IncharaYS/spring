@@ -100,9 +100,15 @@ public class TeamController {
 
 
     @PostMapping("updateTeam")
-    public ModelAndView updateTeam(TeamDTO teamDTO, ModelAndView model) {
+    public ModelAndView updateTeam(TeamDTO teamDTO, ModelAndView model, HttpSession session) {
 
-        IssueCode issueCode = teamService.updateTeam(teamDTO);
+        UserDTO loggedInUser = (UserDTO) session.getAttribute("userInfo");
+        if (loggedInUser == null) {
+            model.setViewName("UserLogin");
+            return model;
+        }
+
+        IssueCode issueCode = teamService.updateTeam(teamDTO,loggedInUser);
 
         switch (issueCode) {
             case ALLOK:

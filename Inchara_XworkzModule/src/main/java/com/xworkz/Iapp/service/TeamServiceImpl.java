@@ -6,6 +6,7 @@ import com.xworkz.Iapp.dto.UserDTO;
 import com.xworkz.Iapp.entity.TeamEntity;
 import com.xworkz.Iapp.entity.UserEntity;
 import com.xworkz.Iapp.repository.TeamRepository;
+import com.xworkz.Iapp.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,26 +21,35 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public IssueCode validateAndSave(TeamDTO dto, UserDTO loggedInUser) {
 
-        if (teamRepository.findByEmail(dto.getContactEmail()).isPresent()) {
-            return IssueCode.EMAILEXISTS;
+        Optional<UserEntity> userOpt = userRepository.findByEmail(loggedInUser.getEmail());
+
+        if (!userOpt.isPresent()) {
+            return IssueCode.EMAILNOTREGISTERED;
         }
 
+        UserEntity managedUser = userOpt.get();
         TeamEntity entity = new TeamEntity();
-        BeanUtils.copyProperties(dto, entity);
 
-        UserEntity loggedInUserE=new UserEntity();
-        BeanUtils.copyProperties(loggedInUser,loggedInUserE);
+        entity.setTeamName(dto.getTeamName());
+        entity.setTeamLead(dto.getTeamLead());
+        entity.setProjectName(dto.getProjectName());
+        entity.setDepartment(dto.getDepartment());
+        entity.setContactEmail(dto.getContactEmail());
 
-        entity.setCreatedByUser(loggedInUserE);
-        entity.setCreatedBy(loggedInUser.getEmail());
+        entity.setCreatedByUser(managedUser);
 
+        entity.setCreatedBy(managedUser.getEmail());
         boolean saved = teamRepository.save(entity);
 
         return saved ? IssueCode.ALLOK : IssueCode.DBERROR;
     }
+
 
 
     @Override
@@ -80,7 +90,15 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public IssueCode updateTeam(TeamDTO dto) {
+    public IssueCode updateTeam(TeamDTO dto, UserDTO loggedInUser) {
+
+        Optional<UserEntity> userOpt = userRepository.findByEmail(loggedInUser.getEmail());
+
+        if (!userOpt.isPresent()) {
+            return IssueCode.EMAILNOTREGISTERED;
+        }
+
+        UserEntity managedUser = userOpt.get();
 
         if (dto == null || dto.getTeamId() <= 0) {
             return IssueCode.INVALIDINPUT;
@@ -97,6 +115,8 @@ public class TeamServiceImpl implements TeamService {
         entity.setTeamLead(dto.getTeamLead());
         entity.setProjectName(dto.getProjectName());
         entity.setDepartment(dto.getDepartment());
+        entity.setUpdatedBy(managedUser.getEmail());
+
 
         boolean updated = teamRepository.updateTeam(entity);
         return updated ? IssueCode.ALLOK : IssueCode.DBERROR;

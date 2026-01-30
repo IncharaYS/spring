@@ -32,9 +32,7 @@
             private String phoneNo;
 
             @NotNull(message = "Please enter age")
-            @Min(value = 18, message = "Age should be above 18")
-            @Max(value = 100, message = "Age should be below 100")
-            private Integer age;
+            private String age;
 
             @NotBlank(message = "Please enter gender")
             private String gender;

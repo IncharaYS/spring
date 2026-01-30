@@ -20,16 +20,17 @@ import java.util.List;
 public class UserEntity extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int userId;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String userName;
 
-    @Column(name = "email", unique = true, length = 50)
+    @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(name = "phone_no", length = 20)
+    @Column(name = "phone_no", nullable = false, length = 20)
     private String phoneNo;
 
     @Column(name = "age")
@@ -41,20 +42,22 @@ public class UserEntity extends BaseEntity {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "invalidPasswordCount")
+    @Column(name = "invalid_password_count")
     private int invalidPasswordCount;
 
-    @Column(name = "otp")
+    @Column(name = "otp", length = 10)
     private String otp;
 
     @Column(name = "otp_generated_time")
     private Long otpGeneratedTime;
 
-    /* ================= RELATION ================= */
-    /* One user can create many teams */
-    @OneToMany(mappedBy = "createdByUser", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "createdByUser",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
     private List<TeamEntity> createdTeams;
 }

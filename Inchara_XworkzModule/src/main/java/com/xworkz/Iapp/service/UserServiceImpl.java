@@ -199,22 +199,29 @@ public class UserServiceImpl implements UserService {
 
 
 
-        @Override
-        public IssueCode updateUser(UserDTO userDTO) {
+    @Override
+    public IssueCode updateUser(UserDTO userDTO) {
 
-            Optional<UserEntity> optionalEntity = userRepository.findByEmail(userDTO.getEmail());
+        Optional<UserEntity> optionalEntity =
+                userRepository.findByEmail(userDTO.getEmail());
 
-            if (!optionalEntity.isPresent()) {
-                return IssueCode.EMAILNOTREGISTERED;
-            }
-
-            UserEntity entity = optionalEntity.get();
-
-            BeanUtils.copyProperties(userDTO,entity);
-
-            boolean updated = userRepository.updateUser(entity);
-            return updated ? IssueCode.ALLOK : IssueCode.DBERROR;
+        if (!optionalEntity.isPresent()) {
+            return IssueCode.EMAILNOTREGISTERED;
         }
+
+        UserEntity entity = optionalEntity.get();
+
+        entity.setUserName(userDTO.getUserName());
+        entity.setPhoneNo(userDTO.getPhoneNo());
+        entity.setAge(userDTO.getAge());
+        entity.setGender(userDTO.getGender());
+        entity.setAddress(userDTO.getAddress());
+
+        boolean updated = userRepository.updateUser(entity);
+
+        return updated ? IssueCode.ALLOK : IssueCode.DBERROR;
+    }
+
 
         @Override
         public IssueCode deleteUser(String email) {

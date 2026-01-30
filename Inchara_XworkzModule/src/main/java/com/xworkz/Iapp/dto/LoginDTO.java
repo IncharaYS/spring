@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class LoginDTO {
 
     @NotBlank(message = "Please enter email")
-   @Email(message = "Enter valid email")
+    @Email(message = "Enter valid email")
     private String email;
 
     @NotBlank(message = "Please enter password")

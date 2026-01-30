@@ -11,7 +11,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "team_members")
-public class MemberEntity {
+@NamedQueries(
+        @NamedQuery(name = "findByTeamId", query = "select m from MemberEntity m where m.team.teamId = :teamId")
+)
+public class MemberEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +30,6 @@ public class MemberEntity {
     @Column(name = "role", length = 30)
     private String role;
 
-    /* ================= TEAM RELATION ================= */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
     private TeamEntity team;

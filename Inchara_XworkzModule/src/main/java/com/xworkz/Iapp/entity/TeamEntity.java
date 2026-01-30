@@ -1,9 +1,6 @@
 package com.xworkz.Iapp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.List;
         @NamedQuery(name = "findTeamByEmail", query = "select t from TeamEntity t where t.contactEmail = :email"),
         @NamedQuery(name = "findAllTeams", query = "select t from TeamEntity t")
 })
+@ToString(exclude = {"members", "createdByUser"})
 public class TeamEntity extends BaseEntity {
 
     @Id
@@ -31,6 +29,7 @@ public class TeamEntity extends BaseEntity {
     @Column(name = "team_lead", nullable = false, length = 30)
     private String teamLead;
 
+
     @Column(name = "project_name", nullable = false, length = 50)
     private String projectName;
 
@@ -40,12 +39,10 @@ public class TeamEntity extends BaseEntity {
     @Column(name = "contact_email", nullable = false, unique = true, length = 50)
     private String contactEmail;
 
-    /* ================= CREATED BY USER ================= */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id", nullable = false)
     private UserEntity createdByUser;
 
-    /* ================= TEAM MEMBERS ================= */
     @OneToMany(
             mappedBy = "team",
             cascade = CascadeType.ALL,

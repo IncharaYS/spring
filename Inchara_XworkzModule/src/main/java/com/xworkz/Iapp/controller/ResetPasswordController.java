@@ -89,7 +89,7 @@
             long now = System.currentTimeMillis();
             long generatedTime = user.getOtpGeneratedTime();
 
-            long remainingTime = 60 - ((now - generatedTime) / 1000);
+            long remainingTime = 60 -((now-generatedTime) / 1000);
             if (remainingTime < 0) {
                 remainingTime = 0;
             }

@@ -3,10 +3,11 @@ package com.xworkz.Iapp.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.*;
-import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,23 +16,25 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", updatable = false)
+    protected LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    @Column(name = "updated_at")
+    protected LocalDateTime updatedAt;
 
-    @Column(updatable = false)
-    private String createdBy;
+    @Column(name = "created_by", updatable = false)
+    protected String createdBy;
 
-    private String updatedBy;
+    @Column(name = "updated_by")
+    protected String updatedBy;
 
     @PrePersist
-    void setCreatedAt(){
-        createdAt=LocalDateTime.now();
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    void updatedAt(){
-        updatedAt=LocalDateTime.now();
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

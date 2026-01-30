@@ -17,7 +17,7 @@ public interface TeamService {
 
     Optional<TeamDTO> getTeamById(int id);
 
-    IssueCode updateTeam(TeamDTO dto);
+    IssueCode updateTeam(TeamDTO dto, UserDTO loggedInUser);
 
     IssueCode  deleteTeam(int id);
 

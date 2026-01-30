@@ -101,7 +101,7 @@
                 0 18px 36px rgba(0, 0, 0, 0.35);
         }
 
-        /* ================= TEAM CARD CONTENT ================= */
+
         .team-card .card-body {
             padding: 1.6rem;
         }
@@ -116,13 +116,12 @@
             color: #0a2540;
         }
 
-        /* ================= BUTTONS ================= */
         .team-card .btn {
             border-radius: 0.6rem;
             font-weight: 500;
         }
 
-        /* ================= ALERTS ================= */
+
         .alert {
             border-radius: 0.75rem;
             font-weight: 500;
@@ -134,7 +133,6 @@
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg shadow-sm"
      style="background-color: #0b3c5d; min-height: 60px;">
     <div class="container-fluid d-flex align-items-center">
@@ -175,7 +173,6 @@
     </div>
 </nav>
 
-<!-- SIDEBAR -->
 <div id="sidebar" class="sidebar">
 
     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -197,7 +194,6 @@
     </div>
 </div>
 
-<!-- CONTENT -->
 <div class="container"
      style="min-height: calc(100vh - 60px); padding:40px 0;">
 
@@ -205,7 +201,6 @@
 
         <h3 class="card-title text-center mb-4">All Teams</h3>
 
-        <!-- MESSAGES -->
         <c:if test="${not empty successMsg}">
             <div class="alert alert-success text-center">${successMsg}</div>
         </c:if>
@@ -214,12 +209,10 @@
             <div class="alert alert-danger text-center">${failureMsg}</div>
         </c:if>
 
-        <!-- NO TEAMS -->
         <c:if test="${empty teams}">
             <p class="text-center text-muted">No teams available</p>
         </c:if>
 
-        <!-- TEAM CARDS -->
         <c:if test="${not empty teams}">
             <div class="row g-4">
 

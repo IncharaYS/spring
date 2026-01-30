@@ -82,22 +82,30 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean updateUser(UserEntity userEntity) {
 
+        EntityManager entityManager = null;
+
         try {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
+
+            userEntity.setUpdatedBy(userEntity.getEmail());
 
             entityManager.merge(userEntity);
 
             entityManager.getTransaction().commit();
-            entityManager.close();
             return true;
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
 
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
     }
+
 
 
     @Override
